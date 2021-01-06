@@ -1,0 +1,84 @@
+{
+  "name": "dioscuri",
+  "version": "0.0.0",
+  "description": "A gemtext (`text/gemini`) parser with support for streaming, ASTs, and CSTs",
+  "license": "MIT",
+  "keywords": [
+    "dioscuri",
+    "castor",
+    "pollux",
+    "gemini",
+    "gemtext",
+    "document",
+    "parse",
+    "tokenize",
+    "lexer",
+    "stream",
+    "ast",
+    "cts"
+  ],
+  "repository": "wooorm/dioscuri",
+  "bugs": "https://github.com/wooorm/dioscuri/issues",
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/wooorm"
+  },
+  "author": "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)",
+  "contributors": [
+    "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)"
+  ],
+  "type": "module",
+  "main": "./index.mjs",
+  "module": "./index.mjs",
+  "files": [
+    "lib/",
+    "index.js"
+  ],
+  "dependencies": {
+    "repeat-string": "^1.0.0",
+    "unist-util-visit": "^2.0.0",
+    "zwitch": "^1.0.0"
+  },
+  "devDependencies": {
+    "c8": "^7.0.0",
+    "concat-stream": "^2.0.0",
+    "prettier": "^2.0.0",
+    "regenerate": "^1.0.0",
+    "remark-cli": "^9.0.0",
+    "remark-preset-wooorm": "^8.0.0",
+    "tape": "^5.0.0",
+    "xo": "^0.37.0"
+  },
+  "scripts": {
+    "format": "remark . -qfo && prettier . -w --loglevel warn && xo --fix",
+    "test-api": "node test/index.mjs",
+    "test-coverage": "c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 --reporter lcov node --experimental-modules test/index.mjs",
+    "test": "npm run format && npm run test-coverage"
+  },
+  "prettier": {
+    "tabWidth": 2,
+    "useTabs": false,
+    "singleQuote": true,
+    "bracketSpacing": false,
+    "semi": false,
+    "trailingComma": "none"
+  },
+  "xo": {
+    "prettier": true,
+    "esnext": false,
+    "extensions": [
+      "mjs"
+    ],
+    "rules": {
+      "complexity": "off",
+      "import/no-unassigned-import": "off",
+      "max-depth": "off",
+      "unicorn/explicit-length-check": "off"
+    }
+  },
+  "remarkConfig": {
+    "plugins": [
+      "preset-wooorm"
+    ]
+  }
+}
