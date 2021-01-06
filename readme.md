@@ -278,7 +278,7 @@ Some text, *emphasis*, **strong**\
 `code()`, and ~~scratch that~~strikethrough.
 
 Here’s a [link](https://example.com 'Just an example'), [link reference][*],
-and images: [image reference][x], [](example.png 'Another example').
+and images: [image reference][*], [](example.png 'Another example').
 
 ***
 
@@ -341,7 +341,7 @@ Now, running `node example.mjs` yields:
 
 Some text, emphasis, strong code(), and strikethrough.
 
-Here’s a link[1], link reference[2], and images: [image reference][x], [3].
+Here’s a link[1], link reference[2], and images: image reference[2], [3].
 
 > Some quotes
 
