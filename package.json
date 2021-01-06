@@ -1,6 +1,6 @@
 {
   "name": "dioscuri",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "A gemtext (`text/gemini`) parser with support for streaming, ASTs, and CSTs",
   "license": "MIT",
   "keywords": [
