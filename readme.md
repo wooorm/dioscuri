@@ -62,6 +62,7 @@ npm install dioscuri
     *   [`Quote`](#quote)
     *   [`Text`](#text)
 *   [Security](#security)
+*   [Related](#related)
 *   [License](#license)
 
 ## Use
@@ -587,6 +588,13 @@ interface Text <: Literal {
 Gemtext is safe.
 As for the generated HTML: that’s safe by default.
 Pass `allowDangerousProtocol: true` if you want to live dangerously.
+
+## Related
+
+*   [`@derhuerst/gemini`](https://github.com/derhuerst/gemini)
+    – Gemini protocol server & client
+*   [`gemini-fetch`](https://github.com/RangerMauve/gemini-fetch)
+    – load Gemini protocol data the way you would fetch from HTTP in JavaScript
 
 ## License
 
