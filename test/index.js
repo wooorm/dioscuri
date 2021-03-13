@@ -1,5 +1,3 @@
-'use strict'
-
 import './buffer.js'
 import './from-gemtext.js'
 import './from-mdast.js'

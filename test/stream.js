@@ -1,5 +1,3 @@
-'use strict'
-
 import fs from 'fs'
 import {PassThrough} from 'stream'
 import test from 'tape'

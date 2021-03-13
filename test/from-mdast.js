@@ -1,5 +1,3 @@
-'use strict'
-
 import test from 'tape'
 import {fromMdast} from '../index.js'
 

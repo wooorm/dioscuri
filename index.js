@@ -1,5 +1,3 @@
-'use strict'
-
 export {buffer} from './lib/buffer.js'
 export {compiler} from './lib/compiler.js'
 export {fromGemtext} from './lib/from-gemtext.js'
