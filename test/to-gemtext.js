@@ -1,7 +1,7 @@
 'use strict'
 
 import test from 'tape'
-import {toGemtext} from '../index.mjs'
+import {toGemtext} from '../index.js'
 
 test('toGemtext', function (t) {
   t.throws(

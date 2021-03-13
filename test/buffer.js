@@ -1,7 +1,7 @@
 'use strict'
 
 import test from 'tape'
-import {buffer} from '../index.mjs'
+import {buffer} from '../index.js'
 
 test('buffer', function (t) {
   t.equal(buffer(''), '', 'should support an empty document')

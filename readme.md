@@ -122,7 +122,7 @@ Some text
 * List
 ```
 
-An our script, `example.mjs`, looks as follows:
+An our script, `example.js`, looks as follows:
 
 ```js
 import fs from 'fs'
@@ -133,7 +133,7 @@ var doc = fs.readFileSync('example.gmi')
 console.log(buffer(doc))
 ```
 
-Now, running `node example.mjs` yields:
+Now, running `node example.js` yields:
 
 ```html
 <h1>Hello, world!</h1>
@@ -158,7 +158,7 @@ Streaming interface to compile gemtext to HTML.
 
 ###### Example
 
-Assuming the same `example.gmi` as before and an `example.mjs` like this:
+Assuming the same `example.gmi` as before and an `example.js` like this:
 
 ```js
 import fs from 'fs'
@@ -174,7 +174,7 @@ function handleError(error) {
 }
 ```
 
-Then running `node example.mjs` yields the same as before.
+Then running `node example.js` yields the same as before.
 
 ### `fromGemtext(doc, encoding?)`
 
@@ -187,7 +187,7 @@ Parse gemtext to into an AST (**[gast][]**).
 
 ###### Example
 
-Assuming the same `example.gmi` as before and an `example.mjs` like this:
+Assuming the same `example.gmi` as before and an `example.js` like this:
 
 ```js
 import fs from 'fs'
@@ -198,7 +198,7 @@ var doc = fs.readFileSync('example.gmi')
 console.dir(fromGemtext(doc), {depth: null})
 ```
 
-Now running `node example.mjs` yields (positional info removed for brevity):
+Now running `node example.js` yields (positional info removed for brevity):
 
 ```js
 {
@@ -223,7 +223,7 @@ Serialize **[gast][]**.
 
 ###### Example
 
-Say our script `example.mjs` looks as follows:
+Say our script `example.js` looks as follows:
 
 ```js
 import {toGemtext} from 'dioscuri'
@@ -240,7 +240,7 @@ var tree = {
 console.log(toGemtext(tree))
 ```
 
-Then running `node example.mjs` yields:
+Then running `node example.js` yields:
 
 ```gemini
 # Hello, world!
@@ -316,7 +316,7 @@ Footnotes[^†], ^[even inline].
 [^†]: Footnote definition
 ````
 
-An our script, `example.mjs`, looks as follows:
+An our script, `example.js`, looks as follows:
 
 ```js
 import fs from 'fs'
@@ -335,7 +335,7 @@ var mdast = fromMarkdown(fs.readFileSync('example.md'), {
 console.log(toGemtext(fromMdast(mdast)))
 ```
 
-Now, running `node example.mjs` yields:
+Now, running `node example.js` yields:
 
 ````gemini
 # Hello, world!
@@ -409,7 +409,7 @@ Some text
 * List
 ```
 
-An our script, `example.mjs`, looks as follows:
+An our script, `example.js`, looks as follows:
 
 ```js
 import fs from 'fs'
@@ -420,7 +420,7 @@ var doc = fs.readFileSync('example.gmi')
 console.dir(toMdast(fromGemtext(doc)), {depth: null})
 ```
 
-Now, running `node example.mjs` yields (position info removed for brevity):
+Now, running `node example.js` yields (position info removed for brevity):
 
 ```js
 {

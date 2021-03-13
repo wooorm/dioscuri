@@ -4,7 +4,7 @@ import fs from 'fs'
 import {PassThrough} from 'stream'
 import test from 'tape'
 import concat from 'concat-stream'
-import {stream} from '../index.mjs'
+import {stream} from '../index.js'
 
 test('stream', function (t) {
   var s

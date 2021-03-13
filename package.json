@@ -27,12 +27,12 @@
   "contributors": [
     "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)"
   ],
+  "sideEffects": false,
   "type": "module",
-  "main": "./index.mjs",
-  "module": "./index.mjs",
+  "main": "index.js",
   "files": [
     "lib/",
-    "index.mjs"
+    "index.js"
   ],
   "dependencies": {
     "repeat-string": "^1.0.0",
@@ -51,8 +51,8 @@
   },
   "scripts": {
     "format": "remark . -qfo && prettier . -w --loglevel warn && xo --fix",
-    "test-api": "node test/index.mjs",
-    "test-coverage": "c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 --reporter lcov node --experimental-modules test/index.mjs",
+    "test-api": "node test/index.js",
+    "test-coverage": "c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 --reporter lcov node --experimental-modules test/index.js",
     "test": "npm run format && npm run test-coverage"
   },
   "prettier": {
@@ -66,9 +66,6 @@
   "xo": {
     "prettier": true,
     "esnext": false,
-    "extensions": [
-      "mjs"
-    ],
     "rules": {
       "complexity": "off",
       "import/no-unassigned-import": "off",

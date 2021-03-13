@@ -1,7 +1,7 @@
 'use strict'
 
 import test from 'tape'
-import {fromMdast} from '../index.mjs'
+import {fromMdast} from '../index.js'
 
 test('fromMdast', function (t) {
   t.throws(

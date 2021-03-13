@@ -1,7 +1,7 @@
 'use strict'
 
 import test from 'tape'
-import {fromGemtext} from '../index.mjs'
+import {fromGemtext} from '../index.js'
 
 test('fromGemtext', function (t) {
   t.deepEqual(
