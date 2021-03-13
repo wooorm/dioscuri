@@ -30,10 +30,10 @@ gemtext.
 Or if you want to combine your posts into an RSS feed or on your “homepage”.
 And many other things!
 
-Note that this package is ESM only: Node 12+ is required to use it and it must
-be `import`ed instead of `require`d.
-
 ## Install
+
+This package is ESM only: Node 12+ is needed to use it and it must be `import`ed
+instead of `require`d.
 
 [npm][]:
 
@@ -70,6 +70,11 @@ npm install dioscuri
 See each interface below for examples.
 
 ## API
+
+This package exports the following identifiers: `buffer`, `stream`,
+`fromGemtext`, `toGemtext`, `fromMdast`, `toMdast`.
+The raw `compiler` and `parser` are also exported.
+There is no default export.
 
 ### `buffer(doc, encoding?, options?)`
 
