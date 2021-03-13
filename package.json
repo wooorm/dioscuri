@@ -37,7 +37,7 @@
   "dependencies": {
     "repeat-string": "^1.0.0",
     "unist-util-visit": "^2.0.0",
-    "zwitch": "^1.0.0"
+    "zwitch": "^2.0.0"
   },
   "devDependencies": {
     "c8": "^7.0.0",
