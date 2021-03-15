@@ -75,13 +75,13 @@ test('fromMdast', function (t) {
 
   t.deepEqual(
     fromMdast({type: 'heading', depth: 1}),
-    {type: 'heading', rank: 1, value: ''},
+    [{type: 'heading', rank: 1, value: ''}],
     'should support a heading w/o content'
   )
 
   t.deepEqual(
     fromMdast({type: 'heading', children: [{type: 'text', value: 'a'}]}),
-    {type: 'heading', rank: 1, value: 'a'},
+    [{type: 'heading', rank: 1, value: 'a'}],
     'should support a heading (no depth)'
   )
 
@@ -91,7 +91,7 @@ test('fromMdast', function (t) {
       depth: 1,
       children: [{type: 'text', value: 'a'}]
     }),
-    {type: 'heading', rank: 1, value: 'a'},
+    [{type: 'heading', rank: 1, value: 'a'}],
     'should support a heading (depth: 1)'
   )
 
@@ -101,7 +101,7 @@ test('fromMdast', function (t) {
       depth: 3,
       children: [{type: 'text', value: 'a'}]
     }),
-    {type: 'heading', rank: 3, value: 'a'},
+    [{type: 'heading', rank: 3, value: 'a'}],
     'should support a heading (depth: 3)'
   )
 
@@ -111,7 +111,7 @@ test('fromMdast', function (t) {
       depth: 4,
       children: [{type: 'text', value: 'a'}]
     }),
-    {type: 'text', value: 'a'},
+    [{type: 'text', value: 'a'}],
     'should support a heading (depth: 4) as a `text`'
   )
 
