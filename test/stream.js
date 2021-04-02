@@ -5,7 +5,9 @@ import concat from 'concat-stream'
 import {stream} from '../index.js'
 
 test('stream', function (t) {
+  /** @type {ReturnType<stream>} */
   var s
+  /** @type {number} */
   var phase
 
   t.plan(13)
@@ -14,6 +16,7 @@ test('stream', function (t) {
     .pipe(stream())
     .pipe(concat(onconcat1))
 
+  /** @param {Buffer} result */
   function onconcat1(result) {
     t.equal(
       result,
@@ -41,6 +44,7 @@ test('stream', function (t) {
 
   slowStream(Buffer.from('> a\n* b')).pipe(stream()).pipe(concat(onconcat2))
 
+  /** @param {Buffer} result */
   function onconcat2(result) {
     t.equal(
       result,
@@ -53,6 +57,7 @@ test('stream', function (t) {
     .pipe(stream())
     .pipe(concat(onconcat3))
 
+  /** @param {Buffer} result */
   function onconcat3(result) {
     t.equal(
       result,
@@ -154,6 +159,10 @@ test('stream', function (t) {
   )
 })
 
+/**
+ * @param {string|Buffer} value
+ * @param {string} [encoding]
+ */
 function slowStream(value, encoding) {
   var stream = new PassThrough()
   var index = 0
