@@ -1,16 +1,5 @@
 {
-  "files": [
-    "index.js",
-    "lib/buffer.js",
-    "lib/compiler.js",
-    "lib/from-gemtext.js",
-    "lib/from-mdast.js",
-    "lib/parser.js",
-    "lib/stream.js",
-    "lib/to-gemtext.js",
-    "lib/to-mdast.js"
-  ],
-  "include": ["*.js"],
+  "include": ["*.js", "{lib/,test/}**/*.js"],
   "compilerOptions": {
     "target": "ES2020",
     "lib": ["ES2020"],
