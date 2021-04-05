@@ -7,7 +7,7 @@
 
 Do you:
 
-*   🤨 think the HTTP and HTML are bloated?
+*   🤨 think that HTTP and HTML are bloated?
 *   😔 feel markdown has superfluous features?
 *   🤔 find gopher too light?
 *   🥰 like BRUTALISM?
