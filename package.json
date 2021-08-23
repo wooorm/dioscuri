@@ -38,9 +38,7 @@
   ],
   "dependencies": {
     "@types/mdast": "^3.0.0",
-    "@types/repeat-string": "^1.0.0",
     "@types/unist": "^2.0.0",
-    "repeat-string": "^1.0.0",
     "unist-util-visit": "^2.0.0",
     "zwitch": "^2.0.0"
   },
