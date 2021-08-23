@@ -1,3 +1,7 @@
+/**
+ * @typedef {import('../lib/parser').BufferEncoding} Encoding
+ */
+
 import fs from 'fs'
 import {PassThrough} from 'stream'
 import test from 'tape'
@@ -5,12 +9,10 @@ import concat from 'concat-stream'
 import {stream} from '../index.js'
 
 test('stream', function (t) {
-  /** @type {ReturnType<stream>} */
-  var s
   /** @type {number} */
   var phase
 
-  t.plan(13)
+  t.plan(15)
 
   slowStream('* a\n\n> b\n* c\nd\n* e\n* b\n# f')
     .pipe(stream())
@@ -90,13 +92,23 @@ test('stream', function (t) {
     function () {
       var tr = stream()
       tr.end()
+      tr.write('')
+    },
+    /^Error: Did not expect `write` after `end`$/,
+    'should throw on write after end'
+  )
+
+  t.throws(
+    function () {
+      var tr = stream()
+      tr.end()
       tr.end()
     },
     /^Error: Did not expect `write` after `end`$/,
     'should throw on end after end'
   )
 
-  s = stream()
+  let s = stream()
   s.pipe(
     concat(function (value) {
       t.equal(String(value), '', 'should end w/o ever receiving data')
@@ -131,6 +143,7 @@ test('stream', function (t) {
       t.equal(String(value), '<p>brC!vo</p>', 'should honour encoding')
     })
   )
+  // @ts-expect-error: buffer is okay.
   s.end(Buffer.from([0x62, 0x72, 0xc3, 0xa1, 0x76, 0x6f]), 'ascii')
 
   phase = 0
@@ -148,6 +161,11 @@ test('stream', function (t) {
   })
 
   s = stream()
+  s.write('charlie', function () {
+    t.pass('should trigger callback before data')
+  })
+
+  s = stream()
   s.pipe(new PassThrough())
 
   t.throws(
@@ -161,7 +179,7 @@ test('stream', function (t) {
 
 /**
  * @param {string|Buffer} value
- * @param {string} [encoding]
+ * @param {Encoding} [encoding]
  */
 function slowStream(value, encoding) {
   var stream = new PassThrough()

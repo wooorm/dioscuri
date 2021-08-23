@@ -4,6 +4,7 @@ import {fromMdast} from '../index.js'
 test('fromMdast', function (t) {
   t.throws(
     function () {
+      // @ts-expect-error: Custom node.
       fromMdast({type: 'unknown'})
     },
     /Cannot handle unknown node `unknown`/,
@@ -12,6 +13,7 @@ test('fromMdast', function (t) {
 
   t.throws(
     function () {
+      // @ts-expect-error: Invalid node.
       fromMdast({})
     },
     /Cannot handle value `\[object Object]`, expected node/,
@@ -68,18 +70,21 @@ test('fromMdast', function (t) {
   )
 
   t.deepEqual(
+    // @ts-expect-error: `children` missing.
     fromMdast({type: 'paragraph'}),
     undefined,
     'should ignore a paragraph w/o content'
   )
 
   t.deepEqual(
+    // @ts-expect-error: `children` missing.
     fromMdast({type: 'heading', depth: 1}),
     [{type: 'heading', rank: 1, value: ''}],
     'should support a heading w/o content'
   )
 
   t.deepEqual(
+    // @ts-expect-error: `depth` missing.
     fromMdast({type: 'heading', children: [{type: 'text', value: 'a'}]}),
     [{type: 'heading', rank: 1, value: 'a'}],
     'should support a heading (no depth)'
@@ -116,6 +121,7 @@ test('fromMdast', function (t) {
   )
 
   t.deepEqual(
+    // @ts-expect-error: `children` missing.
     fromMdast({type: 'heading', depth: 5}),
     undefined,
     'should ignore a heading gte 3 w/o value'
@@ -128,6 +134,7 @@ test('fromMdast', function (t) {
   )
 
   t.deepEqual(
+    // @ts-expect-error: `children` missing.
     fromMdast({type: 'blockquote'}),
     {type: 'quote', value: ''},
     'should support a blockquote w/o content'
@@ -147,7 +154,7 @@ test('fromMdast', function (t) {
       type: 'blockquote',
       children: [
         {type: 'paragraph', children: [{type: 'text', value: 'a'}]},
-        {type: 'heading', children: [{type: 'text', value: 'b'}]},
+        {type: 'heading', depth: 1, children: [{type: 'text', value: 'b'}]},
         {type: 'paragraph', children: [{type: 'text', value: 'c'}]}
       ]
     }),
@@ -162,6 +169,7 @@ test('fromMdast', function (t) {
   )
 
   t.deepEqual(
+    // @ts-expect-error: `children` missing.
     fromMdast({type: 'list', children: [{type: 'listItem'}]}),
     {type: 'list', children: [{type: 'listItem', value: ''}]},
     'should support a list w/ a child w/o value'
@@ -191,7 +199,7 @@ test('fromMdast', function (t) {
           type: 'listItem',
           children: [
             {type: 'paragraph', children: [{type: 'text', value: 'a'}]},
-            {type: 'heading', children: [{type: 'text', value: 'b'}]},
+            {type: 'heading', depth: 1, children: [{type: 'text', value: 'b'}]},
             {type: 'paragraph', children: [{type: 'text', value: 'c'}]}
           ]
         }
@@ -202,18 +210,21 @@ test('fromMdast', function (t) {
   )
 
   t.deepEqual(
+    // @ts-expect-error: `value` missing.
     fromMdast({type: 'code'}),
     {type: 'pre', alt: null, value: ''},
     'should support a pre w/o content'
   )
 
   t.deepEqual(
+    // @ts-expect-error: `value` missing.
     fromMdast({type: 'code', lang: 'a'}),
     {type: 'pre', alt: 'a', value: ''},
     'should support a pre w/ lang, w/o content'
   )
 
   t.deepEqual(
+    // @ts-expect-error: `value` missing.
     fromMdast({type: 'code', lang: 'a', meta: 'b c'}),
     {type: 'pre', alt: 'a b c', value: ''},
     'should support a pre w/ lang, meta; w/o content'
@@ -226,6 +237,7 @@ test('fromMdast', function (t) {
   )
 
   t.deepEqual(
+    // @ts-expect-error: `children` missing.
     fromMdast({type: 'emphasis'}),
     '',
     'should support emphasis w/o content'
@@ -251,6 +263,7 @@ test('fromMdast', function (t) {
   )
 
   t.deepEqual(
+    // @ts-expect-error: `children` missing.
     fromMdast({type: 'strong'}),
     '',
     'should support strong w/o content'
@@ -276,6 +289,7 @@ test('fromMdast', function (t) {
   )
 
   t.deepEqual(
+    // @ts-expect-error: `value` missing.
     fromMdast({type: 'inlineCode'}),
     '',
     'should support inlineCode w/o content'
@@ -307,14 +321,17 @@ test('fromMdast', function (t) {
   )
 
   t.deepEqual(
+    // @ts-expect-error: `identifier`, `url` missing.
     fromMdast({type: 'definition'}),
     undefined,
     'should ignore `definition` nodes'
   )
 
+  // @ts-expect-error: `children` missing.
   t.deepEqual(fromMdast({type: 'link'}), '[1]', 'should support a `link`')
 
   t.deepEqual(
+    // @ts-expect-error: `children` missing.
     fromMdast({type: 'linkReference'}),
     '',
     'should ignore an undefined `linkReference`'
@@ -326,8 +343,10 @@ test('fromMdast', function (t) {
       children: [
         {
           type: 'paragraph',
+          // @ts-expect-error: `children`, `referenceType` missing.
           children: [{type: 'linkReference', identifier: 'a'}]
         },
+        // @ts-expect-error: `url` missing.
         {type: 'definition', identifier: 'a'}
       ]
     }),
@@ -342,9 +361,11 @@ test('fromMdast', function (t) {
     'should support a defined `linkReference`'
   )
 
+  // @ts-expect-error: `url` missing.
   t.deepEqual(fromMdast({type: 'image'}), '[1]', 'should support an `image`')
 
   t.deepEqual(
+    // @ts-expect-error: `referenceType`, `identifier` missing.
     fromMdast({type: 'imageReference'}),
     '',
     'should ignore an undefined `imageReference`'
@@ -356,8 +377,10 @@ test('fromMdast', function (t) {
       children: [
         {
           type: 'paragraph',
+          // @ts-expect-error: `referenceType` missing.
           children: [{type: 'imageReference', identifier: 'a'}]
         },
+        // @ts-expect-error: `url` missing.
         {type: 'definition', identifier: 'a'}
       ]
     }),
@@ -415,6 +438,7 @@ test('fromMdast', function (t) {
               children: [{type: 'text', value: 'c'}]
             },
             {type: 'text', value: ' d '},
+            // @ts-expect-error: `url` missing.
             {
               type: 'linkReference',
               identifier: 'e',
@@ -454,6 +478,7 @@ test('fromMdast', function (t) {
             {
               type: 'linkReference',
               identifier: 'e',
+              referenceType: 'full',
               children: [{type: 'text', value: 'f'}]
             }
           ]
@@ -607,6 +632,7 @@ test('fromMdast', function (t) {
 
   t.test('gfm', function (t) {
     t.deepEqual(
+      // @ts-expect-error: `children` missing.
       fromMdast({type: 'tableCell'}),
       '',
       'should support a table cell w/o value'
@@ -644,6 +670,7 @@ test('fromMdast', function (t) {
     )
 
     t.deepEqual(
+      // @ts-expect-error: `children` missing.
       fromMdast({type: 'tableRow'}),
       '',
       'should support a table row w/o value'
@@ -736,7 +763,7 @@ test('fromMdast', function (t) {
         type: 'paragraph',
         children: [
           {type: 'text', value: 'a '},
-          {type: 'delete', children: [{type: 'strikethrough', value: 'b'}]},
+          {type: 'delete', children: [{type: 'text', value: 'b'}]},
           {type: 'text', value: 'c'},
           {type: 'text', value: ' d.'}
         ]
@@ -765,6 +792,7 @@ test('fromMdast', function (t) {
     )
 
     t.deepEqual(
+      // @ts-expect-error: non-standard node.
       fromMdast({type: 'toml', value: 'a: no'}),
       undefined,
       'should ignore toml'
@@ -791,6 +819,7 @@ test('fromMdast', function (t) {
     )
 
     t.deepEqual(
+      // @ts-expect-error: `identifier` missing.
       fromMdast({type: 'footnoteReference'}),
       undefined,
       'should ignore an undefined `footnoteReference`'
@@ -832,6 +861,7 @@ test('fromMdast', function (t) {
             type: 'paragraph',
             children: [{type: 'footnoteReference', identifier: 'a'}]
           },
+          // @ts-expect-error: `children` missing.
           {type: 'footnoteDefinition', identifier: 'a'}
         ]
       }),

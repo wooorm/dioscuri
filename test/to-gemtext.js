@@ -4,6 +4,7 @@ import {toGemtext} from '../index.js'
 test('toGemtext', function (t) {
   t.throws(
     function () {
+      // @ts-expect-error: custom node.
       toGemtext({type: 'unknown'})
     },
     /Cannot handle unknown node `unknown`/,
@@ -12,6 +13,7 @@ test('toGemtext', function (t) {
 
   t.throws(
     function () {
+      // @ts-expect-error: invalid node.
       toGemtext({})
     },
     /Cannot handle value `\[object Object]`, expected node/,
@@ -20,6 +22,7 @@ test('toGemtext', function (t) {
 
   t.equal(toGemtext({type: 'break'}), '\n', 'should support a break')
 
+  // @ts-expect-error: `value` missing.
   t.equal(toGemtext({type: 'text'}), '', 'should support a text w/o content')
 
   t.equal(
@@ -29,32 +32,38 @@ test('toGemtext', function (t) {
   )
 
   t.equal(
+    // @ts-expect-error: `value` missing.
     toGemtext({type: 'heading'}),
     '#',
     'should support a heading w/o rank'
   )
 
   t.equal(
+    // @ts-expect-error: `rank` too high.
     toGemtext({type: 'heading', rank: 4}),
     '###',
     'should cap headings to rank 3'
   )
 
   t.equal(
+    // @ts-expect-error: `rank` missing.
     toGemtext({type: 'heading', value: 'a'}),
     '# a',
     'should support a heading w/ value'
   )
 
+  // @ts-expect-error: `url`, `value` missing.
   t.equal(toGemtext({type: 'link'}), '=>', 'should support a link w/o url')
 
   t.equal(
+    // @ts-expect-error: `url` missing.
     toGemtext({type: 'link', value: 'a'}),
     '=>',
     'should ignore `value` of a link w/o url'
   )
 
   t.equal(
+    // @ts-expect-error: `value` missing.
     toGemtext({type: 'link', url: 'a'}),
     '=> a',
     'should support a link w/ url'
@@ -66,6 +75,7 @@ test('toGemtext', function (t) {
     'should support a link w/ url, value'
   )
 
+  // @ts-expect-error: `children` missing.
   t.equal(toGemtext({type: 'list'}), '*', 'should support a list w/o children')
 
   t.equal(
@@ -75,6 +85,7 @@ test('toGemtext', function (t) {
   )
 
   t.equal(
+    // @ts-expect-error: `value` missing.
     toGemtext({type: 'list', children: [{type: 'listItem'}]}),
     '*',
     'should support a list w/ a child'
@@ -100,12 +111,14 @@ test('toGemtext', function (t) {
   )
 
   t.equal(
+    // @ts-expect-error: `value` missing.
     toGemtext({type: 'pre'}),
     '```\n```',
     'should support a pre w/o alt, value'
   )
 
   t.equal(
+    // @ts-expect-error: `value` missing.
     toGemtext({type: 'pre', alt: 'a'}),
     '```a\n```',
     'should support a pre w/ alt, w/o value'
@@ -123,6 +136,7 @@ test('toGemtext', function (t) {
     'should support a pre w/ alt, value'
   )
 
+  // @ts-expect-error: `value` missing.
   t.equal(toGemtext({type: 'quote'}), '>', 'should support a quote w/o value')
 
   t.equal(
@@ -131,6 +145,7 @@ test('toGemtext', function (t) {
     'should support a quote w/ value'
   )
 
+  // @ts-expect-error: `children` missing.
   t.equal(toGemtext({type: 'root'}), '', 'should support an empty root (1)')
 
   t.equal(
@@ -156,9 +171,11 @@ test('toGemtext', function (t) {
         {type: 'break'},
         {type: 'list', children: [{type: 'listItem', value: 'e'}]},
         // These two will be ignored:
+        // @ts-expect-error: `value` missing.
         {type: 'text'},
+        // @ts-expect-error: `value` missing.
         {type: 'text'},
-        {type: 'heading', value: 'f'},
+        {type: 'heading', rank: 1, value: 'f'},
         {type: 'text', value: 'g'}
       ]
     }),
