@@ -1,7 +1,7 @@
 import test from 'tape'
 import {fromGemtext} from '../index.js'
 
-test('fromGemtext', function (t) {
+test('fromGemtext', (t) => {
   t.deepEqual(
     fromGemtext(''),
     {

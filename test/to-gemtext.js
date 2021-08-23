@@ -1,9 +1,9 @@
 import test from 'tape'
 import {toGemtext} from '../index.js'
 
-test('toGemtext', function (t) {
+test('toGemtext', (t) => {
   t.throws(
-    function () {
+    () => {
       // @ts-expect-error: custom node.
       toGemtext({type: 'unknown'})
     },
@@ -12,7 +12,7 @@ test('toGemtext', function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       // @ts-expect-error: invalid node.
       toGemtext({})
     },

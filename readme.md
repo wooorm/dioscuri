@@ -130,10 +130,10 @@ Some text
 An our script, `example.js`, looks as follows:
 
 ```js
-import fs from 'fs'
+import fs from 'node:fs'
 import {buffer} from 'dioscuri'
 
-var doc = fs.readFileSync('example.gmi')
+const doc = fs.readFileSync('example.gmi')
 
 console.log(buffer(doc))
 ```
@@ -166,7 +166,7 @@ Streaming interface to compile gemtext to HTML.
 Assuming the same `example.gmi` as before and an `example.js` like this:
 
 ```js
-import fs from 'fs'
+import fs from 'node:fs'
 import {stream} from 'dioscuri'
 
 fs.createReadStream('example.gmi')
@@ -195,10 +195,10 @@ Parse gemtext to into an AST (**[gast][]**).
 Assuming the same `example.gmi` as before and an `example.js` like this:
 
 ```js
-import fs from 'fs'
+import fs from 'node:fs'
 import {fromGemtext} from 'dioscuri'
 
-var doc = fs.readFileSync('example.gmi')
+const doc = fs.readFileSync('example.gmi')
 
 console.dir(fromGemtext(doc), {depth: null})
 ```
@@ -233,7 +233,7 @@ Say our script `example.js` looks as follows:
 ```js
 import {toGemtext} from 'dioscuri'
 
-var tree = {
+const tree = {
   type: 'root',
   children: [
     {type: 'heading', rank: 1, value: 'Hello, world!'},
@@ -324,17 +324,17 @@ Footnotes[^†], ^[even inline].
 An our script, `example.js`, looks as follows:
 
 ```js
-import fs from 'fs'
-import gfm from 'micromark-extension-gfm'
-import footnote from 'micromark-extension-footnote'
-import fromMarkdown from 'mdast-util-from-markdown'
-import mdastGfm from 'mdast-util-gfm'
-import mdastFootnote from 'mdast-util-footnote'
+import fs from 'node:fs'
+import {gfm} from 'micromark-extension-gfm'
+import {footnote} from 'micromark-extension-footnote'
+import {fromMarkdown} from 'mdast-util-from-markdown'
+import {gfmFromMarkdown} from 'mdast-util-gfm'
+import {footnoteFromMarkdown} from 'mdast-util-footnote'
 import {fromMdast, toGemtext} from 'dioscuri'
 
-var mdast = fromMarkdown(fs.readFileSync('example.md'), {
+const mdast = fromMarkdown(fs.readFileSync('example.md'), {
   extensions: [gfm(), footnote({inlineNotes: true})],
-  mdastExtensions: [mdastGfm.fromMarkdown, mdastFootnote.fromMarkdown]
+  mdastExtensions: [gfmFromMarkdown, footnoteFromMarkdown]
 })
 
 console.log(toGemtext(fromMdast(mdast)))
@@ -417,10 +417,10 @@ Some text
 An our script, `example.js`, looks as follows:
 
 ```js
-import fs from 'fs'
+import fs from 'node:fs'
 import {fromGemtext, toMdast} from 'dioscuri'
 
-var doc = fs.readFileSync('example.gmi')
+const doc = fs.readFileSync('example.gmi')
 
 console.dir(toMdast(fromGemtext(doc)), {depth: null})
 ```

@@ -1,9 +1,9 @@
 import test from 'tape'
 import {toMdast} from '../index.js'
 
-test('toMdast', function (t) {
+test('toMdast', (t) => {
   t.throws(
-    function () {
+    () => {
       toMdast({type: 'unknown'})
     },
     /Cannot handle unknown node `unknown`/,
@@ -11,7 +11,7 @@ test('toMdast', function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       toMdast({})
     },
     /Cannot handle value `\[object Object]`, expected node/,

@@ -1,9 +1,9 @@
 import test from 'tape'
 import {fromMdast} from '../index.js'
 
-test('fromMdast', function (t) {
+test('fromMdast', (t) => {
   t.throws(
-    function () {
+    () => {
       // @ts-expect-error: Custom node.
       fromMdast({type: 'unknown'})
     },
@@ -12,7 +12,7 @@ test('fromMdast', function (t) {
   )
 
   t.throws(
-    function () {
+    () => {
       // @ts-expect-error: Invalid node.
       fromMdast({})
     },
@@ -630,7 +630,7 @@ test('fromMdast', function (t) {
     'should not add breaks (blank lines) with `tight: true`'
   )
 
-  t.test('gfm', function (t) {
+  t.test('gfm', (t) => {
     t.deepEqual(
       // @ts-expect-error: `children` missing.
       fromMdast({type: 'tableCell'}),
@@ -775,7 +775,7 @@ test('fromMdast', function (t) {
     t.end()
   })
 
-  t.test('frontmatter', function (t) {
+  t.test('frontmatter', (t) => {
     t.deepEqual(
       fromMdast({
         type: 'root',
@@ -801,7 +801,7 @@ test('fromMdast', function (t) {
     t.end()
   })
 
-  t.test('footnotes', function (t) {
+  t.test('footnotes', (t) => {
     t.deepEqual(
       fromMdast({
         type: 'footnoteDefinition',

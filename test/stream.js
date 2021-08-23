@@ -2,15 +2,16 @@
  * @typedef {import('../lib/parser').BufferEncoding} Encoding
  */
 
-import fs from 'fs'
-import {PassThrough} from 'stream'
+import {Buffer} from 'node:buffer'
+import fs from 'node:fs'
+import {PassThrough} from 'node:stream'
 import test from 'tape'
 import concat from 'concat-stream'
 import {stream} from '../index.js'
 
-test('stream', function (t) {
+test('stream', (t) => {
   /** @type {number} */
-  var phase
+  let phase
 
   t.plan(15)
 
@@ -89,8 +90,8 @@ test('stream', function (t) {
   t.equal(stream().end(), true, 'should return true for `end`')
 
   t.throws(
-    function () {
-      var tr = stream()
+    () => {
+      const tr = stream()
       tr.end()
       tr.write('')
     },
@@ -99,8 +100,8 @@ test('stream', function (t) {
   )
 
   t.throws(
-    function () {
-      var tr = stream()
+    () => {
+      const tr = stream()
       tr.end()
       tr.end()
     },
@@ -110,7 +111,7 @@ test('stream', function (t) {
 
   let s = stream()
   s.pipe(
-    concat(function (value) {
+    concat((value) => {
       t.equal(String(value), '', 'should end w/o ever receiving data')
     })
   )
@@ -118,7 +119,7 @@ test('stream', function (t) {
 
   s = stream()
   s.pipe(
-    concat(function (value) {
+    concat((value) => {
       t.equal(String(value), '<p>x</p>', 'should end')
     }),
     {end: true}
@@ -127,7 +128,7 @@ test('stream', function (t) {
 
   s = stream()
   s.pipe(
-    concat(function (value) {
+    concat((value) => {
       t.equal(
         String(value),
         '<p>alpha</p>',
@@ -139,7 +140,7 @@ test('stream', function (t) {
 
   s = stream()
   s.pipe(
-    concat(function (value) {
+    concat((value) => {
       t.equal(String(value), '<p>brC!vo</p>', 'should honour encoding')
     })
   )
@@ -150,18 +151,18 @@ test('stream', function (t) {
 
   s = stream()
   s.pipe(
-    concat(function () {
+    concat(() => {
       t.equal(phase, 1, 'should trigger data after callback')
       phase++
     })
   )
-  s.end('charlie', function () {
+  s.end('charlie', () => {
     t.equal(phase, 0, 'should trigger callback before data')
     phase++
   })
 
   s = stream()
-  s.write('charlie', function () {
+  s.write('charlie', () => {
     t.pass('should trigger callback before data')
   })
 
@@ -169,7 +170,7 @@ test('stream', function (t) {
   s.pipe(new PassThrough())
 
   t.throws(
-    function () {
+    () => {
       s.emit('error', new Error('Whoops!'))
     },
     /Whoops!/,
@@ -182,8 +183,8 @@ test('stream', function (t) {
  * @param {Encoding} [encoding]
  */
 function slowStream(value, encoding) {
-  var stream = new PassThrough()
-  var index = 0
+  const stream = new PassThrough()
+  let index = 0
 
   setImmediate(send)
 
