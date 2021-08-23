@@ -174,6 +174,12 @@ test('buffer', (t) => {
   )
 
   t.equal(
+    buffer('=> javascript:alert(1)', undefined, {allowDangerousProtocol: true}),
+    '<div><a href="javascript:alert(1)"></a></div>',
+    'should support javascript URLs w/ `allowDangerousProtocol`'
+  )
+
+  t.equal(
     buffer('=> 💩.html'),
     '<div><a href="%F0%9F%92%A9.html"></a></div>',
     'should support non-ascii characters in URLs'
