@@ -554,7 +554,7 @@ interface ListItem <: Literal {
 
 ```idl
 interface Pre <: Literal {
-  type: "per"
+  type: "pre"
   alt: string?
   value: string?
 }
