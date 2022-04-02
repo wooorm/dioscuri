@@ -41,6 +41,20 @@ instead of `require`d.
 npm install dioscuri
 ```
 
+In Deno with [`esm.sh`][esmsh]:
+
+```js
+import * as dioscuri from 'https://esm.sh/dioscuri@1'
+```
+
+In browsers with [`esm.sh`][esmsh]:
+
+```html
+<script type="module">
+  import * as dioscuri from 'https://esm.sh/dioscuri@1?bundle'
+</script>
+```
+
 ## Contents
 
 *   [Use](#use)
@@ -624,6 +638,8 @@ Pass `allowDangerousProtocol: true` if you want to live dangerously.
 [size]: https://bundlephobia.com/result?p=dioscuri
 
 [npm]: https://docs.npmjs.com/cli/install
+
+[esmsh]: https://esm.sh
 
 [license]: license
 
