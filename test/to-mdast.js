@@ -111,7 +111,6 @@ test('toMdast', () => {
   )
 
   assert.deepEqual(
-    // @ts-expect-error: `url` missing
     toMdast({type: 'link', value: 'a'}),
     {
       type: 'paragraph',
@@ -188,11 +187,8 @@ test('toMdast', () => {
     'should support a list w/ a child'
   )
 
-  /** @type {import('../lib/gtast.js').ListItem} */
-  const itemA = {type: 'listItem', value: 'a'}
-
   assert.deepEqual(
-    toMdast({type: 'list', children: [itemA]}),
+    toMdast({type: 'list', children: [{type: 'listItem', value: 'a'}]}),
     {
       type: 'list',
       ordered: false,
@@ -210,17 +206,14 @@ test('toMdast', () => {
     'should support a list w/ a child w/ a value'
   )
 
-  /** @type {Array<import('../lib/gtast.js').ListItem>} */
-  const items = [
-    {type: 'listItem', value: 'a'},
-    {type: 'listItem', value: ''},
-    {type: 'listItem', value: 'b'}
-  ]
-
   assert.deepEqual(
     toMdast({
       type: 'list',
-      children: items
+      children: [
+        {type: 'listItem', value: 'a'},
+        {type: 'listItem', value: ''},
+        {type: 'listItem', value: 'b'}
+      ]
     }),
     {
       type: 'list',
@@ -309,20 +302,14 @@ test('toMdast', () => {
     'should support an empty root (2)'
   )
 
-  /** @type {import('../lib/gtast.js').Text} */
-  const text = {type: 'text', value: 'a'}
-
   assert.deepEqual(
-    toMdast({type: 'root', children: [text]}),
+    toMdast({type: 'root', children: [{type: 'text', value: 'a'}]}),
     {
       type: 'root',
       children: [{type: 'paragraph', children: [{type: 'text', value: 'a'}]}]
     },
     'should support a root w/ content'
   )
-
-  /** @type {import('../lib/gtast.js').ListItem} */
-  const itemE = {type: 'listItem', value: 'e'}
 
   assert.deepEqual(
     toMdast({
@@ -333,7 +320,7 @@ test('toMdast', () => {
         {type: 'break'},
         {type: 'pre', value: 'c\n\nd'},
         {type: 'break'},
-        {type: 'list', children: [itemE]},
+        {type: 'list', children: [{type: 'listItem', value: 'e'}]},
         // These two will be ignored:
         // @ts-expect-error: `value` missing.
         {type: 'text'},

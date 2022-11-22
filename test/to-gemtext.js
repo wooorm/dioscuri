@@ -61,7 +61,6 @@ test('toGemtext', () => {
   assert.equal(toGemtext({type: 'link'}), '=>', 'should support a link w/o url')
 
   assert.equal(
-    // @ts-expect-error: `url` missing.
     toGemtext({type: 'link', value: 'a'}),
     '=>',
     'should ignore `value` of a link w/o url'
@@ -100,24 +99,21 @@ test('toGemtext', () => {
     'should support a list w/ a child'
   )
 
-  /** @type {import('../lib/gtast.js').ListItem} */
-  const item = {type: 'listItem', value: 'a'}
-
   assert.equal(
-    toGemtext({type: 'list', children: [item]}),
+    toGemtext({type: 'list', children: [{type: 'listItem', value: 'a'}]}),
     '* a',
     'should support a list w/ a child w/ a value'
   )
 
-  /** @type {Array<import('../lib/gtast.js').ListItem>} */
-  const items = [
-    {type: 'listItem', value: 'a'},
-    {type: 'listItem', value: ''},
-    {type: 'listItem', value: 'b'}
-  ]
-
   assert.equal(
-    toGemtext({type: 'list', children: items}),
+    toGemtext({
+      type: 'list',
+      children: [
+        {type: 'listItem', value: 'a'},
+        {type: 'listItem', value: ''},
+        {type: 'listItem', value: 'b'}
+      ]
+    }),
     '* a\n*\n* b',
     'should support a list w/ children'
   )
@@ -174,17 +170,11 @@ test('toGemtext', () => {
     'should support an empty root (2)'
   )
 
-  /** @type {import('../lib/gtast.js').Text} */
-  const text = {type: 'text', value: 'a'}
-
   assert.equal(
-    toGemtext({type: 'root', children: [text]}),
+    toGemtext({type: 'root', children: [{type: 'text', value: 'a'}]}),
     'a\n',
     'should support a root w/ content'
   )
-
-  /** @type {import('../lib/gtast.js').ListItem} */
-  const itemE = {type: 'listItem', value: 'e'}
 
   assert.equal(
     toGemtext({
@@ -195,7 +185,7 @@ test('toGemtext', () => {
         {type: 'break'},
         {type: 'pre', value: 'c\n\nd'},
         {type: 'break'},
-        {type: 'list', children: [itemE]},
+        {type: 'list', children: [{type: 'listItem', value: 'e'}]},
         // These two will be ignored:
         // @ts-expect-error: `value` missing.
         {type: 'text'},
