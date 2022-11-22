@@ -1,5 +1,5 @@
 /**
- * @typedef {import('../lib/parser').BufferEncoding} Encoding
+ * @typedef {import('../lib/parser.js').BufferEncoding} Encoding
  */
 
 import {Buffer} from 'node:buffer'

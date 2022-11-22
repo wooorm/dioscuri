@@ -187,7 +187,7 @@ test('toMdast', (t) => {
     'should support a list w/ a child'
   )
 
-  /** @type {import('../lib/gtast').ListItem} */
+  /** @type {import('../lib/gtast.js').ListItem} */
   const itemA = {type: 'listItem', value: 'a'}
 
   t.deepEqual(
@@ -209,7 +209,7 @@ test('toMdast', (t) => {
     'should support a list w/ a child w/ a value'
   )
 
-  /** @type {Array<import('../lib/gtast').ListItem>} */
+  /** @type {Array<import('../lib/gtast.js').ListItem>} */
   const items = [
     {type: 'listItem', value: 'a'},
     {type: 'listItem', value: ''},
@@ -308,7 +308,7 @@ test('toMdast', (t) => {
     'should support an empty root (2)'
   )
 
-  /** @type {import('../lib/gtast').Text} */
+  /** @type {import('../lib/gtast.js').Text} */
   const text = {type: 'text', value: 'a'}
 
   t.deepEqual(
@@ -320,7 +320,7 @@ test('toMdast', (t) => {
     'should support a root w/ content'
   )
 
-  /** @type {import('../lib/gtast').ListItem} */
+  /** @type {import('../lib/gtast.js').ListItem} */
   const itemE = {type: 'listItem', value: 'e'}
 
   t.deepEqual(
