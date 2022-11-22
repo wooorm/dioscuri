@@ -91,21 +91,24 @@ test('toGemtext', (t) => {
     'should support a list w/ a child'
   )
 
+  /** @type {import('../lib/gtast.js').ListItem} */
+  const item = {type: 'listItem', value: 'a'}
+
   t.equal(
-    toGemtext({type: 'list', children: [{type: 'listItem', value: 'a'}]}),
+    toGemtext({type: 'list', children: [item]}),
     '* a',
     'should support a list w/ a child w/ a value'
   )
 
+  /** @type {Array<import('../lib/gtast.js').ListItem>} */
+  const items = [
+    {type: 'listItem', value: 'a'},
+    {type: 'listItem', value: ''},
+    {type: 'listItem', value: 'b'}
+  ]
+
   t.equal(
-    toGemtext({
-      type: 'list',
-      children: [
-        {type: 'listItem', value: 'a'},
-        {type: 'listItem', value: ''},
-        {type: 'listItem', value: 'b'}
-      ]
-    }),
+    toGemtext({type: 'list', children: items}),
     '* a\n*\n* b',
     'should support a list w/ children'
   )
@@ -154,11 +157,17 @@ test('toGemtext', (t) => {
     'should support an empty root (2)'
   )
 
+  /** @type {import('../lib/gtast.js').Text} */
+  const text = {type: 'text', value: 'a'}
+
   t.equal(
-    toGemtext({type: 'root', children: [{type: 'text', value: 'a'}]}),
+    toGemtext({type: 'root', children: [text]}),
     'a\n',
     'should support a root w/ content'
   )
+
+  /** @type {import('../lib/gtast.js').ListItem} */
+  const itemE = {type: 'listItem', value: 'e'}
 
   t.equal(
     toGemtext({
@@ -169,7 +178,7 @@ test('toGemtext', (t) => {
         {type: 'break'},
         {type: 'pre', value: 'c\n\nd'},
         {type: 'break'},
-        {type: 'list', children: [{type: 'listItem', value: 'e'}]},
+        {type: 'list', children: [itemE]},
         // These two will be ignored:
         // @ts-expect-error: `value` missing.
         {type: 'text'},

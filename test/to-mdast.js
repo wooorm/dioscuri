@@ -4,6 +4,7 @@ import {toMdast} from '../index.js'
 test('toMdast', (t) => {
   t.throws(
     () => {
+      // @ts-expect-error: unknown.
       toMdast({type: 'unknown'})
     },
     /Cannot handle unknown node `unknown`/,
@@ -12,6 +13,7 @@ test('toMdast', (t) => {
 
   t.throws(
     () => {
+      // @ts-expect-error: not a node.
       toMdast({})
     },
     /Cannot handle value `\[object Object]`, expected node/,
@@ -21,6 +23,7 @@ test('toMdast', (t) => {
   t.deepEqual(toMdast({type: 'break'}), undefined, 'should ignore a break')
 
   t.deepEqual(
+    // @ts-expect-error: `value` missing.
     toMdast({type: 'text'}),
     undefined,
     'should ignore text w/o content'
@@ -76,24 +79,28 @@ test('toMdast', (t) => {
   )
 
   t.deepEqual(
+    // @ts-expect-error: `value`, `rank` missing
     toMdast({type: 'heading'}),
     {type: 'heading', depth: 1, children: []},
     'should support a heading w/o rank'
   )
 
   t.deepEqual(
+    // @ts-expect-error: `value` missing
     toMdast({type: 'heading', rank: 4}),
     {type: 'heading', depth: 3, children: []},
     'should cap headings to rank 3'
   )
 
   t.deepEqual(
+    // @ts-expect-error: `rank` missing
     toMdast({type: 'heading', value: 'a'}),
     {type: 'heading', depth: 1, children: [{type: 'text', value: 'a'}]},
     'should support a heading w/ value'
   )
 
   t.deepEqual(
+    // @ts-expect-error: `url`, `value` missing
     toMdast({type: 'link'}),
     {
       type: 'paragraph',
@@ -103,6 +110,7 @@ test('toMdast', (t) => {
   )
 
   t.deepEqual(
+    // @ts-expect-error: `url` missing
     toMdast({type: 'link', value: 'a'}),
     {
       type: 'paragraph',
@@ -119,6 +127,7 @@ test('toMdast', (t) => {
   )
 
   t.deepEqual(
+    // @ts-expect-error: `value` missing
     toMdast({type: 'link', url: 'a'}),
     {
       type: 'paragraph',
@@ -144,6 +153,7 @@ test('toMdast', (t) => {
   )
 
   t.deepEqual(
+    // @ts-expect-error: `children` missing
     toMdast({type: 'list'}),
     {
       type: 'list',
@@ -166,6 +176,7 @@ test('toMdast', (t) => {
   )
 
   t.deepEqual(
+    // @ts-expect-error: `value` missing.
     toMdast({type: 'list', children: [{type: 'listItem'}]}),
     {
       type: 'list',
@@ -176,8 +187,11 @@ test('toMdast', (t) => {
     'should support a list w/ a child'
   )
 
+  /** @type {import('../lib/gtast').ListItem} */
+  const itemA = {type: 'listItem', value: 'a'}
+
   t.deepEqual(
-    toMdast({type: 'list', children: [{type: 'listItem', value: 'a'}]}),
+    toMdast({type: 'list', children: [itemA]}),
     {
       type: 'list',
       ordered: false,
@@ -195,14 +209,17 @@ test('toMdast', (t) => {
     'should support a list w/ a child w/ a value'
   )
 
+  /** @type {Array<import('../lib/gtast').ListItem>} */
+  const items = [
+    {type: 'listItem', value: 'a'},
+    {type: 'listItem', value: ''},
+    {type: 'listItem', value: 'b'}
+  ]
+
   t.deepEqual(
     toMdast({
       type: 'list',
-      children: [
-        {type: 'listItem', value: 'a'},
-        {type: 'listItem', value: ''},
-        {type: 'listItem', value: 'b'}
-      ]
+      children: items
     }),
     {
       type: 'list',
@@ -230,18 +247,21 @@ test('toMdast', (t) => {
   )
 
   t.deepEqual(
+    // @ts-expect-error: `value` missing.
     toMdast({type: 'pre'}),
     {type: 'code', lang: null, meta: null, value: ''},
     'should support a pre w/o alt, value'
   )
 
   t.deepEqual(
+    // @ts-expect-error: `value` missing.
     toMdast({type: 'pre', alt: 'a'}),
     {type: 'code', lang: 'a', meta: null, value: ''},
     'should support a pre w/ alt, w/o value'
   )
 
   t.deepEqual(
+    // @ts-expect-error: `value` missing.
     toMdast({type: 'pre', alt: 'a b\tc'}),
     {type: 'code', lang: 'a', meta: 'b\tc', value: ''},
     'should support a pre w/ alt including whitespace, w/o value'
@@ -260,6 +280,7 @@ test('toMdast', (t) => {
   )
 
   t.deepEqual(
+    // @ts-expect-error: `value` missing.
     toMdast({type: 'quote'}),
     {type: 'blockquote', children: []},
     'should support a quote w/o value'
@@ -275,6 +296,7 @@ test('toMdast', (t) => {
   )
 
   t.deepEqual(
+    // @ts-expect-error: `children` missing.
     toMdast({type: 'root'}),
     {type: 'root', children: []},
     'should support an empty root (1)'
@@ -286,14 +308,20 @@ test('toMdast', (t) => {
     'should support an empty root (2)'
   )
 
+  /** @type {import('../lib/gtast').Text} */
+  const text = {type: 'text', value: 'a'}
+
   t.deepEqual(
-    toMdast({type: 'root', children: [{type: 'text', value: 'a'}]}),
+    toMdast({type: 'root', children: [text]}),
     {
       type: 'root',
       children: [{type: 'paragraph', children: [{type: 'text', value: 'a'}]}]
     },
     'should support a root w/ content'
   )
+
+  /** @type {import('../lib/gtast').ListItem} */
+  const itemE = {type: 'listItem', value: 'e'}
 
   t.deepEqual(
     toMdast({
@@ -304,10 +332,13 @@ test('toMdast', (t) => {
         {type: 'break'},
         {type: 'pre', value: 'c\n\nd'},
         {type: 'break'},
-        {type: 'list', children: [{type: 'listItem', value: 'e'}]},
+        {type: 'list', children: [itemE]},
         // These two will be ignored:
+        // @ts-expect-error: `value` missing.
         {type: 'text'},
+        // @ts-expect-error: `value` missing.
         {type: 'text'},
+        // @ts-expect-error: `rank` missing.
         {type: 'heading', value: 'f'},
         {type: 'text', value: 'g'}
       ]
