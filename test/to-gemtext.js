@@ -1,8 +1,9 @@
-import test from 'tape'
+import assert from 'node:assert/strict'
+import test from 'node:test'
 import {toGemtext} from '../index.js'
 
-test('toGemtext', (t) => {
-  t.throws(
+test('toGemtext', () => {
+  assert.throws(
     () => {
       // @ts-expect-error: custom node.
       toGemtext({type: 'unknown'})
@@ -11,7 +12,7 @@ test('toGemtext', (t) => {
     'should throw on unknown nodes'
   )
 
-  t.throws(
+  assert.throws(
     () => {
       // @ts-expect-error: invalid node.
       toGemtext({})
@@ -20,32 +21,36 @@ test('toGemtext', (t) => {
     'should throw on non-nodes'
   )
 
-  t.equal(toGemtext({type: 'break'}), '\n', 'should support a break')
+  assert.equal(toGemtext({type: 'break'}), '\n', 'should support a break')
 
-  // @ts-expect-error: `value` missing.
-  t.equal(toGemtext({type: 'text'}), '', 'should support a text w/o content')
+  assert.equal(
+    // @ts-expect-error: `value` missing.
+    toGemtext({type: 'text'}),
+    '',
+    'should support a text w/o content'
+  )
 
-  t.equal(
+  assert.equal(
     toGemtext({type: 'text', value: 'alpha'}),
     'alpha',
     'should support a text w/ content'
   )
 
-  t.equal(
+  assert.equal(
     // @ts-expect-error: `value` missing.
     toGemtext({type: 'heading'}),
     '#',
     'should support a heading w/o rank'
   )
 
-  t.equal(
+  assert.equal(
     // @ts-expect-error: `rank` too high.
     toGemtext({type: 'heading', rank: 4}),
     '###',
     'should cap headings to rank 3'
   )
 
-  t.equal(
+  assert.equal(
     // @ts-expect-error: `rank` missing.
     toGemtext({type: 'heading', value: 'a'}),
     '# a',
@@ -53,38 +58,42 @@ test('toGemtext', (t) => {
   )
 
   // @ts-expect-error: `url`, `value` missing.
-  t.equal(toGemtext({type: 'link'}), '=>', 'should support a link w/o url')
+  assert.equal(toGemtext({type: 'link'}), '=>', 'should support a link w/o url')
 
-  t.equal(
+  assert.equal(
     // @ts-expect-error: `url` missing.
     toGemtext({type: 'link', value: 'a'}),
     '=>',
     'should ignore `value` of a link w/o url'
   )
 
-  t.equal(
+  assert.equal(
     // @ts-expect-error: `value` missing.
     toGemtext({type: 'link', url: 'a'}),
     '=> a',
     'should support a link w/ url'
   )
 
-  t.equal(
+  assert.equal(
     toGemtext({type: 'link', url: 'a', value: 'b'}),
     '=> a b',
     'should support a link w/ url, value'
   )
 
-  // @ts-expect-error: `children` missing.
-  t.equal(toGemtext({type: 'list'}), '*', 'should support a list w/o children')
+  assert.equal(
+    // @ts-expect-error: `children` missing.
+    toGemtext({type: 'list'}),
+    '*',
+    'should support a list w/o children'
+  )
 
-  t.equal(
+  assert.equal(
     toGemtext({type: 'list', children: []}),
     '*',
     'should support a list w/ no children'
   )
 
-  t.equal(
+  assert.equal(
     // @ts-expect-error: `value` missing.
     toGemtext({type: 'list', children: [{type: 'listItem'}]}),
     '*',
@@ -94,7 +103,7 @@ test('toGemtext', (t) => {
   /** @type {import('../lib/gtast.js').ListItem} */
   const item = {type: 'listItem', value: 'a'}
 
-  t.equal(
+  assert.equal(
     toGemtext({type: 'list', children: [item]}),
     '* a',
     'should support a list w/ a child w/ a value'
@@ -107,51 +116,59 @@ test('toGemtext', (t) => {
     {type: 'listItem', value: 'b'}
   ]
 
-  t.equal(
+  assert.equal(
     toGemtext({type: 'list', children: items}),
     '* a\n*\n* b',
     'should support a list w/ children'
   )
 
-  t.equal(
+  assert.equal(
     // @ts-expect-error: `value` missing.
     toGemtext({type: 'pre'}),
     '```\n```',
     'should support a pre w/o alt, value'
   )
 
-  t.equal(
+  assert.equal(
     // @ts-expect-error: `value` missing.
     toGemtext({type: 'pre', alt: 'a'}),
     '```a\n```',
     'should support a pre w/ alt, w/o value'
   )
 
-  t.equal(
+  assert.equal(
     toGemtext({type: 'pre', value: 'a'}),
     '```\na\n```',
     'should support a pre w/o alt, w/ value'
   )
 
-  t.equal(
+  assert.equal(
     toGemtext({type: 'pre', alt: 'a', value: 'b\nc'}),
     '```a\nb\nc\n```',
     'should support a pre w/ alt, value'
   )
 
-  // @ts-expect-error: `value` missing.
-  t.equal(toGemtext({type: 'quote'}), '>', 'should support a quote w/o value')
+  assert.equal(
+    // @ts-expect-error: `value` missing.
+    toGemtext({type: 'quote'}),
+    '>',
+    'should support a quote w/o value'
+  )
 
-  t.equal(
+  assert.equal(
     toGemtext({type: 'quote', value: 'a'}),
     '> a',
     'should support a quote w/ value'
   )
 
-  // @ts-expect-error: `children` missing.
-  t.equal(toGemtext({type: 'root'}), '', 'should support an empty root (1)')
+  assert.equal(
+    // @ts-expect-error: `children` missing.
+    toGemtext({type: 'root'}),
+    '',
+    'should support an empty root (1)'
+  )
 
-  t.equal(
+  assert.equal(
     toGemtext({type: 'root', children: []}),
     '',
     'should support an empty root (2)'
@@ -160,7 +177,7 @@ test('toGemtext', (t) => {
   /** @type {import('../lib/gtast.js').Text} */
   const text = {type: 'text', value: 'a'}
 
-  t.equal(
+  assert.equal(
     toGemtext({type: 'root', children: [text]}),
     'a\n',
     'should support a root w/ content'
@@ -169,7 +186,7 @@ test('toGemtext', (t) => {
   /** @type {import('../lib/gtast.js').ListItem} */
   const itemE = {type: 'listItem', value: 'e'}
 
-  t.equal(
+  assert.equal(
     toGemtext({
       type: 'root',
       children: [
@@ -191,6 +208,4 @@ test('toGemtext', (t) => {
     'a\nb\n\n```\nc\n\nd\n```\n\n* e\n# f\ng\n',
     'should support a root w/ lots of content'
   )
-
-  t.end()
 })

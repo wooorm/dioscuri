@@ -1,8 +1,9 @@
-import test from 'tape'
+import assert from 'node:assert/strict'
+import test from 'node:test'
 import {toMdast} from '../index.js'
 
-test('toMdast', (t) => {
-  t.throws(
+test('toMdast', () => {
+  assert.throws(
     () => {
       // @ts-expect-error: unknown.
       toMdast({type: 'unknown'})
@@ -11,7 +12,7 @@ test('toMdast', (t) => {
     'should throw on unknown nodes'
   )
 
-  t.throws(
+  assert.throws(
     () => {
       // @ts-expect-error: not a node.
       toMdast({})
@@ -20,22 +21,22 @@ test('toMdast', (t) => {
     'should throw on non-nodes'
   )
 
-  t.deepEqual(toMdast({type: 'break'}), undefined, 'should ignore a break')
+  assert.deepEqual(toMdast({type: 'break'}), undefined, 'should ignore a break')
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `value` missing.
     toMdast({type: 'text'}),
     undefined,
     'should ignore text w/o content'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     toMdast({type: 'text', value: 'alpha'}),
     {type: 'paragraph', children: [{type: 'text', value: 'alpha'}]},
     'should support a text w/ content'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     toMdast({
       type: 'text',
       value: 'a',
@@ -64,7 +65,7 @@ test('toMdast', (t) => {
     'should patch positional info'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     toMdast({
       type: 'text',
       value: 'a',
@@ -78,28 +79,28 @@ test('toMdast', (t) => {
     'should patch data'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `value`, `rank` missing
     toMdast({type: 'heading'}),
     {type: 'heading', depth: 1, children: []},
     'should support a heading w/o rank'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `value` missing
     toMdast({type: 'heading', rank: 4}),
     {type: 'heading', depth: 3, children: []},
     'should cap headings to rank 3'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `rank` missing
     toMdast({type: 'heading', value: 'a'}),
     {type: 'heading', depth: 1, children: [{type: 'text', value: 'a'}]},
     'should support a heading w/ value'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `url`, `value` missing
     toMdast({type: 'link'}),
     {
@@ -109,7 +110,7 @@ test('toMdast', (t) => {
     'should support a link w/o url'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `url` missing
     toMdast({type: 'link', value: 'a'}),
     {
@@ -126,7 +127,7 @@ test('toMdast', (t) => {
     'should support a link w/ `value` w/o url'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `value` missing
     toMdast({type: 'link', url: 'a'}),
     {
@@ -136,7 +137,7 @@ test('toMdast', (t) => {
     'should support a link w/ url'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     toMdast({type: 'link', url: 'a', value: 'b'}),
     {
       type: 'paragraph',
@@ -152,7 +153,7 @@ test('toMdast', (t) => {
     'should support a link w/ url, value'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `children` missing
     toMdast({type: 'list'}),
     {
@@ -164,7 +165,7 @@ test('toMdast', (t) => {
     'should support a list w/o children'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     toMdast({type: 'list', children: []}),
     {
       type: 'list',
@@ -175,7 +176,7 @@ test('toMdast', (t) => {
     'should support a list w/ no children'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `value` missing.
     toMdast({type: 'list', children: [{type: 'listItem'}]}),
     {
@@ -190,7 +191,7 @@ test('toMdast', (t) => {
   /** @type {import('../lib/gtast.js').ListItem} */
   const itemA = {type: 'listItem', value: 'a'}
 
-  t.deepEqual(
+  assert.deepEqual(
     toMdast({type: 'list', children: [itemA]}),
     {
       type: 'list',
@@ -216,7 +217,7 @@ test('toMdast', (t) => {
     {type: 'listItem', value: 'b'}
   ]
 
-  t.deepEqual(
+  assert.deepEqual(
     toMdast({
       type: 'list',
       children: items
@@ -246,47 +247,47 @@ test('toMdast', (t) => {
     'should support a list w/ children'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `value` missing.
     toMdast({type: 'pre'}),
     {type: 'code', lang: null, meta: null, value: ''},
     'should support a pre w/o alt, value'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `value` missing.
     toMdast({type: 'pre', alt: 'a'}),
     {type: 'code', lang: 'a', meta: null, value: ''},
     'should support a pre w/ alt, w/o value'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `value` missing.
     toMdast({type: 'pre', alt: 'a b\tc'}),
     {type: 'code', lang: 'a', meta: 'b\tc', value: ''},
     'should support a pre w/ alt including whitespace, w/o value'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     toMdast({type: 'pre', value: 'a'}),
     {type: 'code', lang: null, meta: null, value: 'a'},
     'should support a pre w/o alt, w/ value'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     toMdast({type: 'pre', alt: 'a', value: 'b\nc'}),
     {type: 'code', lang: 'a', meta: null, value: 'b\nc'},
     'should support a pre w/ alt, value'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `value` missing.
     toMdast({type: 'quote'}),
     {type: 'blockquote', children: []},
     'should support a quote w/o value'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     toMdast({type: 'quote', value: 'a'}),
     {
       type: 'blockquote',
@@ -295,14 +296,14 @@ test('toMdast', (t) => {
     'should support a quote w/ value'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `children` missing.
     toMdast({type: 'root'}),
     {type: 'root', children: []},
     'should support an empty root (1)'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     toMdast({type: 'root', children: []}),
     {type: 'root', children: []},
     'should support an empty root (2)'
@@ -311,7 +312,7 @@ test('toMdast', (t) => {
   /** @type {import('../lib/gtast.js').Text} */
   const text = {type: 'text', value: 'a'}
 
-  t.deepEqual(
+  assert.deepEqual(
     toMdast({type: 'root', children: [text]}),
     {
       type: 'root',
@@ -323,7 +324,7 @@ test('toMdast', (t) => {
   /** @type {import('../lib/gtast.js').ListItem} */
   const itemE = {type: 'listItem', value: 'e'}
 
-  t.deepEqual(
+  assert.deepEqual(
     toMdast({
       type: 'root',
       children: [
@@ -369,6 +370,4 @@ test('toMdast', (t) => {
     },
     'should support a root w/ lots of content'
   )
-
-  t.end()
 })

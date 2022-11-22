@@ -1,8 +1,9 @@
-import test from 'tape'
+import assert from 'node:assert/strict'
+import test from 'node:test'
 import {fromGemtext} from '../index.js'
 
-test('fromGemtext', (t) => {
-  t.deepEqual(
+test('fromGemtext', () => {
+  assert.deepEqual(
     fromGemtext(''),
     {
       type: 'root',
@@ -15,7 +16,7 @@ test('fromGemtext', (t) => {
     'should support an empty document'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromGemtext('a\r\nb\nc'),
     {
       type: 'root',
@@ -53,7 +54,7 @@ test('fromGemtext', (t) => {
     'should support text'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromGemtext('a\n\n'),
     {
       type: 'root',
@@ -82,7 +83,7 @@ test('fromGemtext', (t) => {
     'should support breaks'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromGemtext('### a\n##b\n#'),
     {
       type: 'root',
@@ -123,7 +124,7 @@ test('fromGemtext', (t) => {
     'should support headings'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromGemtext('=\n=>\n=>a\n=> b\n=>c d\n=> e\t\tf'),
     {
       type: 'root',
@@ -190,7 +191,7 @@ test('fromGemtext', (t) => {
     'should support links'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromGemtext('*\n* \n*a\n* b\n\nc\n* d\n* e\n*\nf'),
     {
       type: 'root',
@@ -310,7 +311,7 @@ test('fromGemtext', (t) => {
     'should support lists'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromGemtext('```'),
     {
       type: 'root',
@@ -333,7 +334,7 @@ test('fromGemtext', (t) => {
     'should support empty unclosed `pre`'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromGemtext('```x'),
     {
       type: 'root',
@@ -356,7 +357,7 @@ test('fromGemtext', (t) => {
     'should support empty unclosed `pre` w/ `alt`'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromGemtext('```\na\nb\n\nc'),
     {
       type: 'root',
@@ -379,7 +380,7 @@ test('fromGemtext', (t) => {
     'should support filled unclosed `pre` w/o `alt`'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromGemtext('```x\na\nb\n\nc'),
     {
       type: 'root',
@@ -402,7 +403,7 @@ test('fromGemtext', (t) => {
     'should support filled unclosed `pre` w/ `alt`'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromGemtext('```\n```\na'),
     {
       type: 'root',
@@ -433,7 +434,7 @@ test('fromGemtext', (t) => {
     'should support empty closed `pre`'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromGemtext('```\na\n\nb\n```\na'),
     {
       type: 'root',
@@ -464,7 +465,7 @@ test('fromGemtext', (t) => {
     'should support filled closed `pre`'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromGemtext('```a\nb\n```c\nd'),
     {
       type: 'root',
@@ -495,7 +496,7 @@ test('fromGemtext', (t) => {
     'should support filled closed `pre`'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromGemtext('> a\n>b\n>'),
     {
       type: 'root',
@@ -532,6 +533,4 @@ test('fromGemtext', (t) => {
     },
     'should support quotes'
   )
-
-  t.end()
 })

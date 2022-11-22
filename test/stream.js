@@ -2,94 +2,95 @@
  * @typedef {import('../lib/parser.js').BufferEncoding} Encoding
  */
 
+import assert from 'node:assert/strict'
 import {Buffer} from 'node:buffer'
-import fs from 'node:fs'
+import {createReadStream, createWriteStream, promises as fs} from 'node:fs'
 import {PassThrough} from 'node:stream'
-import test from 'tape'
+import test from 'node:test'
 import concat from 'concat-stream'
 import {stream} from '../index.js'
 
-test('stream', (t) => {
-  /** @type {number} */
-  let phase
+test('stream', async () => {
+  await new Promise((resolve) => {
+    slowStream('* a\n\n> b\n* c\nd\n* e\n* b\n# f')
+      .pipe(stream())
+      .pipe(
+        concat(function (result) {
+          assert.equal(
+            result,
+            [
+              '<ul>',
+              '<li>a</li>',
+              '</ul>',
+              '<br />',
+              '<blockquote>',
+              '<p>b</p>',
+              '</blockquote>',
+              '<ul>',
+              '<li>c</li>',
+              '</ul>',
+              '<p>d</p>',
+              '<ul>',
+              '<li>e</li>',
+              '<li>b</li>',
+              '</ul>',
+              '<h1>f</h1>'
+            ].join('\n'),
+            'should support streaming'
+          )
+          resolve(undefined)
+        })
+      )
+  })
 
-  t.plan(15)
+  await new Promise((resolve) => {
+    slowStream(Buffer.from('> a\n* b'))
+      .pipe(stream())
+      .pipe(
+        concat(function (result) {
+          assert.equal(
+            result,
+            '<blockquote>\n<p>a</p>\n</blockquote>\n<ul>\n<li>b</li>\n</ul>',
+            'should support streaming buffers'
+          )
+          resolve(undefined)
+        })
+      )
+  })
 
-  slowStream('* a\n\n> b\n* c\nd\n* e\n* b\n# f')
-    .pipe(stream())
-    .pipe(concat(onconcat1))
+  await new Promise((resolve) => {
+    slowStream(Buffer.from('> a\r\n\r\r\nb'))
+      .pipe(stream())
+      .pipe(
+        concat(function (result) {
+          assert.equal(
+            result,
+            '<blockquote>\r\n<p>a</p>\r\n</blockquote>\r\n<p>\r</p>\r\n<p>b</p>',
+            'should support CRLFs'
+          )
+          resolve(undefined)
+        })
+      )
+  })
 
-  /** @param {Buffer} result */
-  function onconcat1(result) {
-    t.equal(
-      result,
-      [
-        '<ul>',
-        '<li>a</li>',
-        '</ul>',
-        '<br />',
-        '<blockquote>',
-        '<p>b</p>',
-        '</blockquote>',
-        '<ul>',
-        '<li>c</li>',
-        '</ul>',
-        '<p>d</p>',
-        '<ul>',
-        '<li>e</li>',
-        '<li>b</li>',
-        '</ul>',
-        '<h1>f</h1>'
-      ].join('\n'),
-      'should support streaming'
-    )
-  }
+  await (async () => {
+    await fs.writeFile('integrate-input', '#∵')
 
-  slowStream(Buffer.from('> a\n* b')).pipe(stream()).pipe(concat(onconcat2))
+    createReadStream('integrate-input')
+      .pipe(stream())
+      .pipe(createWriteStream('integrate-output'))
+      .on('close', async function () {
+        const input = String(await fs.readFile('integrate-output'))
+        assert.equal(input, '<h1>∵</h1>', 'should support stdin')
 
-  /** @param {Buffer} result */
-  function onconcat2(result) {
-    t.equal(
-      result,
-      '<blockquote>\n<p>a</p>\n</blockquote>\n<ul>\n<li>b</li>\n</ul>',
-      'should support streaming buffers'
-    )
-  }
+        await fs.unlink('integrate-input')
+        await fs.unlink('integrate-output')
+      })
+  })()
 
-  slowStream(Buffer.from('> a\r\n\r\r\nb'))
-    .pipe(stream())
-    .pipe(concat(onconcat3))
+  assert.equal(stream().end(), true, 'should return true for `end`')
 
-  /** @param {Buffer} result */
-  function onconcat3(result) {
-    t.equal(
-      result,
-      '<blockquote>\r\n<p>a</p>\r\n</blockquote>\r\n<p>\r</p>\r\n<p>b</p>',
-      'should support CRLFs'
-    )
-  }
-
-  fs.writeFileSync('integrate-input', '#∵')
-
-  fs.createReadStream('integrate-input')
-    .pipe(stream())
-    .pipe(fs.createWriteStream('integrate-output'))
-    .on('close', onend1)
-
-  function onend1() {
-    t.equal(
-      String(fs.readFileSync('integrate-output')),
-      '<h1>∵</h1>',
-      'should support stdin'
-    )
-
-    fs.unlinkSync('integrate-input')
-    fs.unlinkSync('integrate-output')
-  }
-
-  t.equal(stream().end(), true, 'should return true for `end`')
-
-  t.throws(
+  assert.throws(
     () => {
       const tr = stream()
       tr.end()
@@ -99,7 +100,7 @@ test('stream', (t) => {
     'should throw on write after end'
   )
 
-  t.throws(
+  assert.throws(
     () => {
       const tr = stream()
       tr.end()
@@ -109,73 +110,94 @@ test('stream', (t) => {
     'should throw on end after end'
   )
 
-  let s = stream()
-  s.pipe(
-    concat((value) => {
-      t.equal(String(value), '', 'should end w/o ever receiving data')
-    })
-  )
-  s.end()
+  await new Promise((resolve) => {
+    const s = stream()
+    s.pipe(
+      concat((value) => {
+        assert.equal(String(value), '', 'should end w/o ever receiving data')
+        resolve(undefined)
+      })
+    )
+    s.end()
+  })
 
-  s = stream()
-  s.pipe(
-    concat((value) => {
-      t.equal(String(value), '<p>x</p>', 'should end')
-    }),
-    {end: true}
-  )
-  s.end('x')
+  await new Promise((resolve) => {
+    const s = stream()
+    s.pipe(
+      concat((value) => {
+        assert.equal(String(value), '<p>x</p>', 'should end')
+        resolve(undefined)
+      }),
+      {end: true}
+    )
+    s.end('x')
+  })
 
-  s = stream()
-  s.pipe(
-    concat((value) => {
-      t.equal(
-        String(value),
-        '<p>alpha</p>',
-        'should receive final data from `end`'
-      )
-    })
-  )
-  s.end('alpha')
+  await new Promise((resolve) => {
+    const s = stream()
+    s.pipe(
+      concat((value) => {
+        assert.equal(
+          String(value),
+          '<p>alpha</p>',
+          'should receive final data from `end`'
+        )
+        resolve(undefined)
+      })
+    )
+    s.end('alpha')
+  })
 
-  s = stream()
-  s.pipe(
-    concat((value) => {
-      t.equal(String(value), '<p>brC!vo</p>', 'should honour encoding')
-    })
-  )
-  // @ts-expect-error: buffer is okay.
-  s.end(Buffer.from([0x62, 0x72, 0xc3, 0xa1, 0x76, 0x6f]), 'ascii')
+  await new Promise((resolve) => {
+    const s = stream()
+    s.pipe(
+      concat((value) => {
+        assert.equal(String(value), '<p>brC!vo</p>', 'should honour encoding')
+        resolve(undefined)
+      })
+    )
 
-  phase = 0
+    // @ts-expect-error: buffer is okay.
+    s.end(Buffer.from([0x62, 0x72, 0xc3, 0xa1, 0x76, 0x6f]), 'ascii')
+  })
 
-  s = stream()
-  s.pipe(
-    concat(() => {
-      t.equal(phase, 1, 'should trigger data after callback')
+  await new Promise((resolve) => {
+    let phase = 0
+
+    const s = stream()
+    s.pipe(
+      concat(() => {
+        assert.equal(phase, 1, 'should trigger data after callback')
+        phase++
+        resolve(undefined)
+      })
+    )
+    s.end('charlie', () => {
+      assert.equal(phase, 0, 'should trigger callback before data')
       phase++
     })
-  )
-  s.end('charlie', () => {
-    t.equal(phase, 0, 'should trigger callback before data')
-    phase++
   })
 
-  s = stream()
-  s.write('charlie', () => {
-    t.pass('should trigger callback before data')
+  await new Promise((resolve) => {
+    const s = stream()
+    s.write('charlie', () => {
+      resolve(undefined)
+    })
   })
 
-  s = stream()
-  s.pipe(new PassThrough())
+  await new Promise((resolve) => {
+    const s = stream()
+    s.pipe(new PassThrough())
 
-  t.throws(
-    () => {
-      s.emit('error', new Error('Whoops!'))
-    },
-    /Whoops!/,
-    'should throw if errors are not listened to'
-  )
+    assert.throws(
+      () => {
+        s.emit('error', new Error('Whoops!'))
+      },
+      /Whoops!/,
+      'should throw if errors are not listened to'
+    )
+    resolve(undefined)
+  })
 })
 
 /**

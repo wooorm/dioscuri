@@ -1,8 +1,9 @@
-import test from 'tape'
+import assert from 'node:assert/strict'
+import test from 'node:test'
 import {fromMdast} from '../index.js'
 
-test('fromMdast', (t) => {
-  t.throws(
+test('fromMdast', async (t) => {
+  assert.throws(
     () => {
       // @ts-expect-error: Custom node.
       fromMdast({type: 'unknown'})
@@ -11,7 +12,7 @@ test('fromMdast', (t) => {
     'should throw on unknown nodes'
   )
 
-  t.throws(
+  assert.throws(
     () => {
       // @ts-expect-error: Invalid node.
       fromMdast({})
@@ -20,7 +21,7 @@ test('fromMdast', (t) => {
     'should throw on non-nodes'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromMdast({
       type: 'paragraph',
       children: [
@@ -49,7 +50,7 @@ test('fromMdast', (t) => {
     'should patch positional info'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromMdast({
       type: 'paragraph',
       children: [{type: 'text', value: 'a'}],
@@ -63,34 +64,34 @@ test('fromMdast', (t) => {
     'should patch data'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromMdast({type: 'paragraph', children: [{type: 'text', value: 'a'}]}),
     {type: 'text', value: 'a'},
     'should support a paragraph'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `children` missing.
     fromMdast({type: 'paragraph'}),
     undefined,
     'should ignore a paragraph w/o content'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `children` missing.
     fromMdast({type: 'heading', depth: 1}),
     [{type: 'heading', rank: 1, value: ''}],
     'should support a heading w/o content'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `depth` missing.
     fromMdast({type: 'heading', children: [{type: 'text', value: 'a'}]}),
     [{type: 'heading', rank: 1, value: 'a'}],
     'should support a heading (no depth)'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromMdast({
       type: 'heading',
       depth: 1,
@@ -100,7 +101,7 @@ test('fromMdast', (t) => {
     'should support a heading (depth: 1)'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromMdast({
       type: 'heading',
       depth: 3,
@@ -110,7 +111,7 @@ test('fromMdast', (t) => {
     'should support a heading (depth: 3)'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromMdast({
       type: 'heading',
       depth: 4,
@@ -120,27 +121,27 @@ test('fromMdast', (t) => {
     'should support a heading (depth: 4) as a `text`'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `children` missing.
     fromMdast({type: 'heading', depth: 5}),
     undefined,
     'should ignore a heading gte 3 w/o value'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromMdast({type: 'thematicBreak'}),
     undefined,
     'should ignore a thematic break'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `children` missing.
     fromMdast({type: 'blockquote'}),
     {type: 'quote', value: ''},
     'should support a blockquote w/o content'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromMdast({
       type: 'blockquote',
       children: [{type: 'paragraph', children: [{type: 'text', value: 'a'}]}]
@@ -149,7 +150,7 @@ test('fromMdast', (t) => {
     'should support a blockquote w/ a paragraph'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromMdast({
       type: 'blockquote',
       children: [
@@ -162,20 +163,20 @@ test('fromMdast', (t) => {
     'should support a blockquote w/ several children'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromMdast({type: 'list', children: []}),
     {type: 'list', children: []},
     'should support a list w/o children'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `children` missing.
     fromMdast({type: 'list', children: [{type: 'listItem'}]}),
     {type: 'list', children: [{type: 'listItem', value: ''}]},
     'should support a list w/ a child w/o value'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromMdast({
       type: 'list',
       children: [
@@ -191,7 +192,7 @@ test('fromMdast', (t) => {
     'should support a list w/ a child w/ flow'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromMdast({
       type: 'list',
       children: [
@@ -209,47 +210,47 @@ test('fromMdast', (t) => {
     'should support a list w/ a child w/ several children'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `value` missing.
     fromMdast({type: 'code'}),
     {type: 'pre', alt: null, value: ''},
     'should support a pre w/o content'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `value` missing.
     fromMdast({type: 'code', lang: 'a'}),
     {type: 'pre', alt: 'a', value: ''},
     'should support a pre w/ lang, w/o content'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `value` missing.
     fromMdast({type: 'code', lang: 'a', meta: 'b c'}),
     {type: 'pre', alt: 'a b c', value: ''},
     'should support a pre w/ lang, meta; w/o content'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromMdast({type: 'code', lang: 'a', meta: 'b c', value: 'd\n\ne'}),
     {type: 'pre', alt: 'a b c', value: 'd\n\ne'},
     'should support a pre w/ lang, meta, content'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `children` missing.
     fromMdast({type: 'emphasis'}),
     '',
     'should support emphasis w/o content'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromMdast({type: 'emphasis', children: [{type: 'text', value: 'a'}]}),
     'a',
     'should support emphasis w/ content'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromMdast({
       type: 'emphasis',
       children: [
@@ -262,20 +263,20 @@ test('fromMdast', (t) => {
     'should support emphasis w/ more content'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `children` missing.
     fromMdast({type: 'strong'}),
     '',
     'should support strong w/o content'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromMdast({type: 'strong', children: [{type: 'text', value: 'a'}]}),
     'a',
     'should support strong w/ content'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromMdast({
       type: 'strong',
       children: [
@@ -288,26 +289,26 @@ test('fromMdast', (t) => {
     'should support strong w/ more content'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `value` missing.
     fromMdast({type: 'inlineCode'}),
     '',
     'should support inlineCode w/o content'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromMdast({type: 'inlineCode', value: 'a'}),
     'a',
     'should support inlineCode w/ content'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromMdast({type: 'break'}),
     ' ',
     'should turn breaks into a space'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromMdast({
       type: 'paragraph',
       children: [
@@ -320,7 +321,7 @@ test('fromMdast', (t) => {
     'should support breaks in paragraphs'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `identifier`, `url` missing.
     fromMdast({type: 'definition'}),
     undefined,
@@ -328,16 +329,16 @@ test('fromMdast', (t) => {
   )
 
   // @ts-expect-error: `children` missing.
-  t.deepEqual(fromMdast({type: 'link'}), '[1]', 'should support a `link`')
+  assert.deepEqual(fromMdast({type: 'link'}), '[1]', 'should support a `link`')
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `children` missing.
     fromMdast({type: 'linkReference'}),
     '',
     'should ignore an undefined `linkReference`'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromMdast({
       type: 'root',
       children: [
@@ -361,17 +362,21 @@ test('fromMdast', (t) => {
     'should support a defined `linkReference`'
   )
 
-  // @ts-expect-error: `url` missing.
-  t.deepEqual(fromMdast({type: 'image'}), '[1]', 'should support an `image`')
+  assert.deepEqual(
+    // @ts-expect-error: `url` missing.
+    fromMdast({type: 'image'}),
+    '[1]',
+    'should support an `image`'
+  )
 
-  t.deepEqual(
+  assert.deepEqual(
     // @ts-expect-error: `referenceType`, `identifier` missing.
     fromMdast({type: 'imageReference'}),
     '',
     'should ignore an undefined `imageReference`'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromMdast({
       type: 'root',
       children: [
@@ -395,7 +400,7 @@ test('fromMdast', (t) => {
     'should support a defined `imageReference`'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromMdast({
       type: 'root',
       children: [
@@ -424,7 +429,7 @@ test('fromMdast', (t) => {
     'should support links with URLs'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromMdast({
       type: 'root',
       children: [
@@ -460,7 +465,7 @@ test('fromMdast', (t) => {
     'should support link and link references referencing the same URL'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromMdast({
       type: 'root',
       children: [
@@ -499,7 +504,7 @@ test('fromMdast', (t) => {
     'should support link and link references referencing the same URL w/ different titles'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromMdast({
       type: 'root',
       children: [
@@ -545,7 +550,7 @@ test('fromMdast', (t) => {
     'should add used links to each section by default'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromMdast(
       {
         type: 'root',
@@ -589,7 +594,7 @@ test('fromMdast', (t) => {
     'should support `endlinks` when `endlinks: true`'
   )
 
-  t.deepEqual(
+  assert.deepEqual(
     fromMdast(
       {
         type: 'root',
@@ -630,15 +635,15 @@ test('fromMdast', (t) => {
     'should not add breaks (blank lines) with `tight: true`'
   )
 
-  t.test('gfm', (t) => {
-    t.deepEqual(
+  await t.test('gfm', () => {
+    assert.deepEqual(
       // @ts-expect-error: `children` missing.
       fromMdast({type: 'tableCell'}),
       '',
       'should support a table cell w/o value'
     )
 
-    t.deepEqual(
+    assert.deepEqual(
       fromMdast({
         type: 'tableCell',
         children: [
@@ -651,7 +656,7 @@ test('fromMdast', (t) => {
       'should support a table cell'
     )
 
-    t.deepEqual(
+    assert.deepEqual(
       fromMdast({
         type: 'tableCell',
         children: [{type: 'text', value: 'a , b'}]
@@ -660,7 +665,7 @@ test('fromMdast', (t) => {
       'should support a table cell including a comma'
     )
 
-    t.deepEqual(
+    assert.deepEqual(
       fromMdast({
         type: 'tableCell',
         children: [{type: 'text', value: 'a " b'}]
@@ -669,14 +674,14 @@ test('fromMdast', (t) => {
       'should support a table cell including a quote'
     )
 
-    t.deepEqual(
+    assert.deepEqual(
       // @ts-expect-error: `children` missing.
       fromMdast({type: 'tableRow'}),
       '',
       'should support a table row w/o value'
     )
 
-    t.deepEqual(
+    assert.deepEqual(
       fromMdast({
         type: 'tableRow',
         children: [
@@ -689,13 +694,13 @@ test('fromMdast', (t) => {
       'should support a table row w/ values'
     )
 
-    t.deepEqual(
+    assert.deepEqual(
       fromMdast({type: 'table', children: []}),
       {type: 'pre', alt: 'csv', value: ''},
       'should support a table w/ values'
     )
 
-    t.deepEqual(
+    assert.deepEqual(
       fromMdast({
         type: 'table',
         children: [
@@ -726,7 +731,7 @@ test('fromMdast', (t) => {
       'should support a table w/ values'
     )
 
-    t.deepEqual(
+    assert.deepEqual(
       fromMdast({
         type: 'list',
         children: [
@@ -758,7 +763,7 @@ test('fromMdast', (t) => {
       'should support checked, unchecked list items'
     )
 
-    t.deepEqual(
+    assert.deepEqual(
       fromMdast({
         type: 'paragraph',
         children: [
@@ -771,12 +776,10 @@ test('fromMdast', (t) => {
       {type: 'text', value: 'a c d.'},
       'should ignore delete'
     )
-
-    t.end()
   })
 
-  t.test('frontmatter', (t) => {
-    t.deepEqual(
+  await t.test('frontmatter', () => {
+    assert.deepEqual(
       fromMdast({
         type: 'root',
         children: [
@@ -791,18 +794,16 @@ test('fromMdast', (t) => {
       'should ignore yaml'
     )
 
-    t.deepEqual(
+    assert.deepEqual(
       // @ts-expect-error: non-standard node.
       fromMdast({type: 'toml', value: 'a: no'}),
       undefined,
       'should ignore toml'
     )
-
-    t.end()
   })
 
-  t.test('footnotes', (t) => {
-    t.deepEqual(
+  await t.test('footnotes', () => {
+    assert.deepEqual(
       fromMdast({
         type: 'footnoteDefinition',
         identifier: 'a',
@@ -812,20 +813,20 @@ test('fromMdast', (t) => {
       'should ignore footnote definitions'
     )
 
-    t.deepEqual(
+    assert.deepEqual(
       fromMdast({type: 'footnote', children: [{type: 'text', value: 'b'}]}),
       '[a]',
       'should support footnotes'
     )
 
-    t.deepEqual(
+    assert.deepEqual(
       // @ts-expect-error: `identifier` missing.
       fromMdast({type: 'footnoteReference'}),
       undefined,
       'should ignore an undefined `footnoteReference`'
     )
 
-    t.deepEqual(
+    assert.deepEqual(
       fromMdast({
         type: 'root',
         children: [
@@ -853,7 +854,7 @@ test('fromMdast', (t) => {
       'should support a defined `footnoteReference`'
     )
 
-    t.deepEqual(
+    assert.deepEqual(
       fromMdast({
         type: 'root',
         children: [
@@ -876,7 +877,7 @@ test('fromMdast', (t) => {
       'should support a defined `footnoteReference` w/o content'
     )
 
-    t.deepEqual(
+    assert.deepEqual(
       fromMdast({
         type: 'root',
         children: [
@@ -910,7 +911,7 @@ test('fromMdast', (t) => {
       'should support footnote reference referencing the same identifier'
     )
 
-    t.deepEqual(
+    assert.deepEqual(
       fromMdast({
         type: 'root',
         children: [
@@ -968,9 +969,5 @@ test('fromMdast', (t) => {
       },
       'should support footnotes at the end of the document'
     )
-
-    t.end()
   })
-
-  t.end()
 })
