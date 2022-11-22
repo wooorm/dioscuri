@@ -5,6 +5,8 @@
 [![Downloads][downloads-badge]][downloads]
 [![Size][size-badge]][size]
 
+A gemtext (`text/gemini`) parser with support for streaming, ASTs, and CSTs.
+
 Do you:
 
 *   🤨 think that HTTP and HTML are bloated?
@@ -14,6 +16,38 @@ Do you:
 
 Then [Gemini][] might be for you (see [this post][devault] or [this
 one][christine] on why it’s cool).
+
+## Contents
+
+*   [What is this?](#what-is-this)
+*   [When should I use this?](#when-should-i-use-this)
+*   [Install](#install)
+*   [Use](#use)
+*   [API](#api)
+    *   [`buffer(doc, encoding?, options?)`](#bufferdoc-encoding-options)
+    *   [`stream(options?)`](#streamoptions)
+    *   [`fromGemtext(doc, encoding?)`](#fromgemtextdoc-encoding)
+    *   [`toGemtext(tree)`](#togemtexttree)
+    *   [`fromMdast(tree, options?)`](#frommdasttree-options)
+    *   [`toMdast(tree)`](#tomdasttree)
+*   [gast](#gast)
+    *   [`Root`](#root)
+    *   [`Break`](#break)
+    *   [`Heading`](#heading)
+    *   [`Link`](#link)
+    *   [`List`](#list)
+    *   [`ListItem`](#listitem)
+    *   [`Pre`](#pre)
+    *   [`Quote`](#quote)
+    *   [`Text`](#text)
+*   [Types](#types)
+*   [Compatibility](#compatibility)
+*   [Related](#related)
+*   [Contribute](#contribute)
+*   [Security](#security)
+*   [License](#license)
+
+## What is this?
 
 **Dioscuri** (named for the gemini twins Castor and Pollux) is a
 tokenizer/lexer/parser/etc for gemtext (the `text/gemini` markup format).
@@ -30,10 +64,14 @@ gemtext.
 Or if you want to combine your posts into an RSS feed or on your “homepage”.
 And many other things!
 
+## When should I use this?
+
+Use this for all your gemtext needs!
+
 ## Install
 
-This package is ESM only: Node 12+ is needed to use it and it must be `import`ed
-instead of `require`d.
+This package is [ESM only][esm].
+In Node.js (version 14.14+, 16.0+), install with [npm][]:
 
 [npm][]:
 
@@ -55,38 +93,14 @@ In browsers with [`esm.sh`][esmsh]:
 </script>
 ```
 
-## Contents
-
-*   [Use](#use)
-*   [API](#api)
-    *   [`buffer(doc, encoding?, options?)`](#bufferdoc-encoding-options)
-    *   [`stream(options?)`](#streamoptions)
-    *   [`fromGemtext(doc, encoding?)`](#fromgemtextdoc-encoding)
-    *   [`toGemtext(tree)`](#togemtexttree)
-    *   [`fromMdast(tree, options?)`](#frommdasttree-options)
-    *   [`toMdast(tree)`](#tomdasttree)
-*   [gast](#gast)
-    *   [`Root`](#root)
-    *   [`Break`](#break)
-    *   [`Heading`](#heading)
-    *   [`Link`](#link)
-    *   [`List`](#list)
-    *   [`ListItem`](#listitem)
-    *   [`Pre`](#pre)
-    *   [`Quote`](#quote)
-    *   [`Text`](#text)
-*   [Security](#security)
-*   [Related](#related)
-*   [License](#license)
-
 ## Use
 
 See each interface below for examples.
 
 ## API
 
-This package exports the following identifiers: `buffer`, `stream`,
-`fromGemtext`, `toGemtext`, `fromMdast`, `toMdast`.
+This package exports the identifiers `buffer`, `stream`, `fromGemtext`,
+`toGemtext`, `fromMdast`, `toMdast`.
 The raw `compiler` and `parser` are also exported.
 There is no default export.
 
@@ -123,7 +137,7 @@ Otherwise, the allowed protocols are `gemini`, `http`, `https`, `irc`, `ircs`,
 
 ###### Returns
 
-`string` — Compiled HTML.
+Compiled HTML (`string`).
 
 ###### Example
 
@@ -141,18 +155,18 @@ Some text
 * List
 ```
 
-An our script, `example.js`, looks as follows:
+…and our module `example.js` looks as follows:
 
 ```js
-import fs from 'node:fs'
+import fs from 'node:fs/promises'
 import {buffer} from 'dioscuri'
 
-const doc = fs.readFileSync('example.gmi')
+const doc = await fs.readFile('example.gmi')
 
 console.log(buffer(doc))
 ```
 
-Now, running `node example.js` yields:
+…now running `node example.js` yields:
 
 ```html
 <h1>Hello, world!</h1>
@@ -193,11 +207,11 @@ function handleError(error) {
 }
 ```
 
-Then running `node example.js` yields the same as before.
+…then running `node example.js` yields the same as before.
 
 ### `fromGemtext(doc, encoding?)`
 
-Parse gemtext to into an AST (**[gast][]**).
+Parse gemtext to an AST (**[gast][]**).
 `doc` and `encoding` are the same as the buffering interface above.
 
 ###### Returns
@@ -209,15 +223,15 @@ Parse gemtext to into an AST (**[gast][]**).
 Assuming the same `example.gmi` as before and an `example.js` like this:
 
 ```js
-import fs from 'node:fs'
+import fs from 'node:fs/promises'
 import {fromGemtext} from 'dioscuri'
 
-const doc = fs.readFileSync('example.gmi')
+const doc = await fs.readFile('example.gmi')
 
 console.dir(fromGemtext(doc), {depth: null})
 ```
 
-Now running `node example.js` yields (positional info removed for brevity):
+…now running `node example.js` yields (positional info removed for brevity):
 
 ```js
 {
@@ -259,7 +273,7 @@ const tree = {
 console.log(toGemtext(tree))
 ```
 
-Then running `node example.js` yields:
+…then running `node example.js` yields:
 
 ```gemini
 # Hello, world!
@@ -289,7 +303,7 @@ If you pass one of those in as `tree`, you’ll get `undefined` out.
 
 ###### Example
 
-Say we have a markdown document, `example.md`:
+Say we have a markdown document `example.md`:
 
 ````markdown
 # Hello, world!
@@ -335,10 +349,10 @@ Footnotes[^†], ^[even inline].
 [^†]: Footnote definition
 ````
 
-An our script, `example.js`, looks as follows:
+…and our module `example.js` looks as follows:
 
 ```js
-import fs from 'node:fs'
+import fs from 'node:fs/promises'
 import {gfm} from 'micromark-extension-gfm'
 import {footnote} from 'micromark-extension-footnote'
 import {fromMarkdown} from 'mdast-util-from-markdown'
@@ -346,7 +360,7 @@ import {gfmFromMarkdown} from 'mdast-util-gfm'
 import {footnoteFromMarkdown} from 'mdast-util-footnote'
 import {fromMdast, toGemtext} from 'dioscuri'
 
-const mdast = fromMarkdown(fs.readFileSync('example.md'), {
+const mdast = fromMarkdown(await fs.readFile('example.md'), {
   extensions: [gfm(), footnote({inlineNotes: true})],
   mdastExtensions: [gfmFromMarkdown, footnoteFromMarkdown]
 })
@@ -354,7 +368,7 @@ const mdast = fromMarkdown(fs.readFileSync('example.md'), {
 console.log(toGemtext(fromMdast(mdast)))
 ```
 
-Now, running `node example.js` yields:
+…now running `node example.js` yields:
 
 ````gemini
 # Hello, world!
@@ -414,7 +428,7 @@ If you pass one of those in as `tree`, you’ll get `undefined` out.
 
 ###### Example
 
-Say we have a gemtext document, `example.gmi`:
+Say we have a gemtext document `example.gmi`:
 
 ```gemini
 # Hello, world!
@@ -428,18 +442,18 @@ Some text
 * List
 ```
 
-An our script, `example.js`, looks as follows:
+…and our module `example.js` looks as follows:
 
 ```js
-import fs from 'node:fs'
+import fs from 'node:fs/promises'
 import {fromGemtext, toMdast} from 'dioscuri'
 
-const doc = fs.readFileSync('example.gmi')
+const doc = await fs.readFile('example.gmi')
 
 console.dir(toMdast(fromGemtext(doc)), {depth: null})
 ```
 
-Now, running `node example.js` yields (position info removed for brevity):
+…now running `node example.js` yields (position info removed for brevity):
 
 ```js
 {
@@ -498,7 +512,7 @@ its ecosystem of utilities.
 
 ```idl
 interface Root <: Parent {
-  type: "root"
+  type: 'root'
   children: [Break | Heading | Link | List | Pre | Quote | Text]
 }
 ```
@@ -509,7 +523,7 @@ interface Root <: Parent {
 
 ```idl
 interface Break <: Node {
-  type: "break"
+  type: 'break'
 }
 ```
 
@@ -519,8 +533,8 @@ interface Break <: Node {
 
 ```idl
 interface Heading <: Literal {
-  type: "heading"
-  rank: 1 <= number <= 3
+  type: 'heading'
+  rank: 1 | 2 | 3
   value: string?
 }
 ```
@@ -531,7 +545,7 @@ interface Heading <: Literal {
 
 ```idl
 interface Link <: Literal {
-  type: "link"
+  type: 'link'
   url: string
   value: string?
 }
@@ -546,7 +560,7 @@ It represents a URL to the resource.
 
 ```idl
 interface List <: Parent {
-  type: "list"
+  type: 'list'
   children: [ListItem]
 }
 ```
@@ -557,7 +571,7 @@ interface List <: Parent {
 
 ```idl
 interface ListItem <: Literal {
-  type: "listItem"
+  type: 'listItem'
   value: string?
 }
 ```
@@ -568,7 +582,7 @@ interface ListItem <: Literal {
 
 ```idl
 interface Pre <: Literal {
-  type: "pre"
+  type: 'pre'
   alt: string?
   value: string?
 }
@@ -584,7 +598,7 @@ language of computer code being marked up.
 
 ```idl
 interface Quote <: Literal {
-  type: "quote"
+  type: 'quote'
   value: string?
 }
 ```
@@ -595,25 +609,43 @@ interface Quote <: Literal {
 
 ```idl
 interface Text <: Literal {
-  type: "text"
+  type: 'text'
   value: string
 }
 ```
 
 **Text** ([**Literal**][dfn-literal]) represents a paragraph.
 
+## Types
+
+This package is fully typed with [TypeScript][].
+It exports the additional types `Value` (for the input, string or buffer),
+`BufferEncoding` (`'utf8'` etc), `CompileOptions` (options to turn things to a
+string), and `FromMdastOptions` (options to turn things into gast).
+
+## Compatibility
+
+This package is at least compatible with all maintained versions of Node.js.
+As of now, that is Node.js 14.14+ and 16.0+.
+It also works in Deno and modern browsers.
+
+## Related
+
+*   [`@derhuerst/gemini`](https://github.com/derhuerst/gemini)
+    – gemini protocol server and client
+*   [`gemini-fetch`](https://github.com/RangerMauve/gemini-fetch)
+    – load gemini protocol data the way you would fetch from HTTP in JavaScript
+
+## Contribute
+
+Yes please!
+See [How to Contribute to Open Source][contribute].
+
 ## Security
 
 Gemtext is safe.
 As for the generated HTML: that’s safe by default.
 Pass `allowDangerousProtocol: true` if you want to live dangerously.
-
-## Related
-
-*   [`@derhuerst/gemini`](https://github.com/derhuerst/gemini)
-    – Gemini protocol server & client
-*   [`gemini-fetch`](https://github.com/RangerMauve/gemini-fetch)
-    – load Gemini protocol data the way you would fetch from HTTP in JavaScript
 
 ## License
 
@@ -639,7 +671,13 @@ Pass `allowDangerousProtocol: true` if you want to live dangerously.
 
 [npm]: https://docs.npmjs.com/cli/install
 
+[esm]: https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c
+
 [esmsh]: https://esm.sh
+
+[typescript]: https://www.typescriptlang.org
+
+[contribute]: https://opensource.guide/how-to-contribute/
 
 [license]: license
 
