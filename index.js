@@ -1,3 +1,9 @@
+/**
+ * @typedef {import('./lib/parser.js').Buf} Value
+ * @typedef {import('./lib/parser.js').BufferEncoding} BufferEncoding
+ * @typedef {import('./lib/compiler.js').Options} Options
+ */
+
 export {buffer} from './lib/buffer.js'
 export {compiler} from './lib/compiler.js'
 export {fromGemtext} from './lib/from-gemtext.js'
