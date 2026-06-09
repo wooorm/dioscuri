@@ -82,14 +82,14 @@ npm install dioscuri
 In Deno with [`esm.sh`][esmsh]:
 
 ```js
-import * as dioscuri from 'https://esm.sh/dioscuri@1'
+import * as dioscuri from 'https://esm.sh/dioscuri@2'
 ```
 
 In browsers with [`esm.sh`][esmsh]:
 
 ```html
 <script type="module">
-  import * as dioscuri from 'https://esm.sh/dioscuri@1?bundle'
+  import * as dioscuri from 'https://esm.sh/dioscuri@2?bundle'
 </script>
 ```
 
