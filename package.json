@@ -25,6 +25,7 @@
     "typescript": "^6.0.0",
     "xo": "^2.0.0"
   },
+  "exports": "./index.js",
   "files": [
     "lib/",
     "index.d.ts.map",
@@ -50,7 +51,6 @@
     "tokenize"
   ],
   "license": "MIT",
-  "main": "index.js",
   "name": "dioscuri",
   "overrides": {
     "c8": {
