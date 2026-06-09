@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/consistent-type-definitions, @typescript-eslint/ban-types */
+/* eslint-disable @typescript-eslint/consistent-type-definitions */
 
 import type {
   Parent as UnistParent,
@@ -176,4 +176,4 @@ export interface Pre extends Literal {
   alt?: string | null | undefined
 }
 
-/* eslint-enable @typescript-eslint/consistent-type-definitions, @typescript-eslint/ban-types */
+/* eslint-enable @typescript-eslint/consistent-type-definitions */

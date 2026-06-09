@@ -9,43 +9,43 @@ A gemtext (`text/gemini`) parser with support for streaming, ASTs, and CSTs.
 
 Do you:
 
-*   🤨 think that HTTP and HTML are bloated?
-*   😔 feel markdown has superfluous features?
-*   🤔 find gopher too light?
-*   🥰 like BRUTALISM?
+* 🤨 think that HTTP and HTML are bloated?
+* 😔 feel markdown has superfluous features?
+* 🤔 find gopher too light?
+* 🥰 like BRUTALISM?
 
 Then [Gemini][] might be for you (see [this post][devault] or [this
 one][christine] on why it’s cool).
 
 ## Contents
 
-*   [What is this?](#what-is-this)
-*   [When should I use this?](#when-should-i-use-this)
-*   [Install](#install)
-*   [Use](#use)
-*   [API](#api)
-    *   [`buffer(doc, encoding?, options?)`](#bufferdoc-encoding-options)
-    *   [`stream(options?)`](#streamoptions)
-    *   [`fromGemtext(doc, encoding?)`](#fromgemtextdoc-encoding)
-    *   [`toGemtext(tree)`](#togemtexttree)
-    *   [`fromMdast(tree, options?)`](#frommdasttree-options)
-    *   [`toMdast(tree)`](#tomdasttree)
-*   [gast](#gast)
-    *   [`Root`](#root)
-    *   [`Break`](#break)
-    *   [`Heading`](#heading)
-    *   [`Link`](#link)
-    *   [`List`](#list)
-    *   [`ListItem`](#listitem)
-    *   [`Pre`](#pre)
-    *   [`Quote`](#quote)
-    *   [`Text`](#text)
-*   [Types](#types)
-*   [Compatibility](#compatibility)
-*   [Related](#related)
-*   [Contribute](#contribute)
-*   [Security](#security)
-*   [License](#license)
+* [What is this?](#what-is-this)
+* [When should I use this?](#when-should-i-use-this)
+* [Install](#install)
+* [Use](#use)
+* [API](#api)
+  * [`buffer(doc, encoding?, options?)`](#bufferdoc-encoding-options)
+  * [`stream(options?)`](#streamoptions)
+  * [`fromGemtext(doc, encoding?)`](#fromgemtextdoc-encoding)
+  * [`toGemtext(tree)`](#togemtexttree)
+  * [`fromMdast(tree, options?)`](#frommdasttree-options)
+  * [`toMdast(tree)`](#tomdasttree)
+* [gast](#gast)
+  * [`Root`](#root)
+  * [`Break`](#break)
+  * [`Heading`](#heading)
+  * [`Link`](#link)
+  * [`List`](#list)
+  * [`ListItem`](#listitem)
+  * [`Pre`](#pre)
+  * [`Quote`](#quote)
+  * [`Text`](#text)
+* [Types](#types)
+* [Compatibility](#compatibility)
+* [Related](#related)
+* [Contribute](#contribute)
+* [Security](#security)
+* [License](#license)
 
 ## What is this?
 
@@ -53,11 +53,11 @@ one][christine] on why it’s cool).
 tokenizer/lexer/parser/etc for gemtext (the `text/gemini` markup format).
 It gives you several things:
 
-*   buffering and streaming interfaces that compile to HTML
-*   interfaces to create **[unist][]** compliant abstract syntax trees and
-    serialize those back to gemtext
-*   interfaces to transform to and from **[mdast][]** (markdown ast)
-*   parts that could be used to generate CSTs
+* buffering and streaming interfaces that compile to HTML
+* interfaces to create **[unist][]** compliant abstract syntax trees and
+  serialize those back to gemtext
+* interfaces to transform to and from **[mdast][]** (markdown ast)
+* parts that could be used to generate CSTs
 
 These tools can be used if you now have markdown but want to transform it to
 gemtext.
@@ -631,10 +631,10 @@ It also works in Deno and modern browsers.
 
 ## Related
 
-*   [`@derhuerst/gemini`](https://github.com/derhuerst/gemini)
-    – gemini protocol server and client
-*   [`gemini-fetch`](https://github.com/RangerMauve/gemini-fetch)
-    – load gemini protocol data the way you would fetch from HTTP in JavaScript
+* [`@derhuerst/gemini`](https://github.com/derhuerst/gemini)
+  – gemini protocol server and client
+* [`gemini-fetch`](https://github.com/RangerMauve/gemini-fetch)
+  – load gemini protocol data the way you would fetch from HTTP in JavaScript
 
 ## Contribute
 
@@ -653,56 +653,56 @@ Pass `allowDangerousProtocol: true` if you want to live dangerously.
 
 <!-- Definitions -->
 
-[build-badge]: https://github.com/wooorm/dioscuri/workflows/main/badge.svg
+[author]: https://wooorm.com
+
+[buffer]: https://nodejs.org/api/buffer.html
 
 [build]: https://github.com/wooorm/dioscuri/actions
 
-[coverage-badge]: https://img.shields.io/codecov/c/github/wooorm/dioscuri.svg
+[build-badge]: https://github.com/wooorm/dioscuri/workflows/main/badge.svg
+
+[christine]: https://christine.website/blog/gemini-web-fear-missing-out-2020-08-02
+
+[contribute]: https://opensource.guide/how-to-contribute/
 
 [coverage]: https://codecov.io/github/wooorm/dioscuri
 
-[downloads-badge]: https://img.shields.io/npm/dm/dioscuri.svg
+[coverage-badge]: https://img.shields.io/codecov/c/github/wooorm/dioscuri.svg
+
+[devault]: https://drewdevault.com/2020/11/01/What-is-Gemini-anyway.html
+
+[dfn-literal]: https://github.com/syntax-tree/unist#literal
+
+[dfn-node]: https://github.com/syntax-tree/unist#node
+
+[dfn-parent]: https://github.com/syntax-tree/unist#parent
 
 [downloads]: https://www.npmjs.com/package/dioscuri
 
-[size-badge]: https://img.shields.io/bundlephobia/minzip/dioscuri.svg
+[downloads-badge]: https://img.shields.io/npm/dm/dioscuri.svg
 
-[size]: https://bundlephobia.com/result?p=dioscuri
-
-[npm]: https://docs.npmjs.com/cli/install
+[encoding]: https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings
 
 [esm]: https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c
 
 [esmsh]: https://esm.sh
 
-[typescript]: https://www.typescriptlang.org
-
-[contribute]: https://opensource.guide/how-to-contribute/
-
-[license]: license
-
-[author]: https://wooorm.com
+[gast]: #gast
 
 [gemini]: https://gemini.circumlunar.space
 
-[unist]: https://github.com/syntax-tree/unist
+[license]: license
 
 [mdast]: https://github.com/syntax-tree/mdast
 
-[devault]: https://drewdevault.com/2020/11/01/What-is-Gemini-anyway.html
-
-[christine]: https://christine.website/blog/gemini-web-fear-missing-out-2020-08-02
-
-[encoding]: https://nodejs.org/api/buffer.html#buffer_buffers_and_character_encodings
-
-[buffer]: https://nodejs.org/api/buffer.html
-
-[gast]: #gast
+[npm]: https://docs.npmjs.com/cli/install
 
 [root]: #root
 
-[dfn-parent]: https://github.com/syntax-tree/unist#parent
+[size]: https://bundlephobia.com/result?p=dioscuri
 
-[dfn-node]: https://github.com/syntax-tree/unist#node
+[size-badge]: https://img.shields.io/bundlephobia/minzip/dioscuri.svg
 
-[dfn-literal]: https://github.com/syntax-tree/unist#literal
+[typescript]: https://www.typescriptlang.org
+
+[unist]: https://github.com/syntax-tree/unist
