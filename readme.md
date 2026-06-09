@@ -626,7 +626,7 @@ string), and `FromMdastOptions` (options to turn things into gast).
 ## Compatibility
 
 This package is at least compatible with all maintained versions of Node.js.
-As of now, that is Node.js 14.14+ and 16.0+.
+As of now, that is Node.js 18+.
 It also works in Deno and modern browsers.
 
 ## Related
