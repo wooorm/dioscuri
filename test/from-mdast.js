@@ -814,9 +814,10 @@ test('fromMdast', async (t) => {
     )
 
     assert.deepEqual(
+      // @ts-expect-error: removed from `mdast`.
       fromMdast({type: 'footnote', children: [{type: 'text', value: 'b'}]}),
-      '[a]',
-      'should support footnotes'
+      undefined,
+      'should ignore footnotes'
     )
 
     assert.deepEqual(

@@ -5,11 +5,11 @@
     "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)"
   ],
   "dependencies": {
-    "@types/mdast": "^3.0.0",
-    "@types/unist": "^2.0.0",
-    "micromark-util-encode": "^1.0.0",
-    "micromark-util-sanitize-uri": "^1.0.0",
-    "unist-util-visit": "^4.0.0",
+    "@types/mdast": "^4.0.0",
+    "@types/unist": "^3.0.0",
+    "micromark-util-encode": "^2.0.0",
+    "micromark-util-sanitize-uri": "^2.0.0",
+    "unist-util-visit": "^5.0.0",
     "zwitch": "^2.0.0"
   },
   "description": "A gemtext (`text/gemini`) parser with support for streaming, ASTs, and CSTs",
