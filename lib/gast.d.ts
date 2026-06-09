@@ -6,7 +6,23 @@ import type {
   Parent as UnistParent
 } from 'unist'
 
-export type Node = Root | Content
+/**
+ * Union of registered gast nodes.
+ *
+ * To register custom gast nodes, add them to {@link RootContentMap} and other
+ * places where relevant.
+ * They will be automatically added here.
+ */
+export type Nodes = Content | Root
+
+/**
+ * Union of registered gast parents.
+ *
+ * To register custom gast nodes, add them to {@link RootContentMap} and other
+ * places where relevant.
+ * They will be automatically added here.
+ */
+export type Parents = Extract<Nodes, UnistParent>
 
 /**
  * This map registers all node types that may be used in a root.
@@ -16,7 +32,13 @@ export type Node = Root | Content
  * This interface can be augmented to register custom node types.
  */
 export interface RootContentMap {
-  listItem: Break | Heading | Link | List | Pre | Quote | Text
+  break: Break
+  heading: Heading
+  link: Link
+  list: List
+  pre: Pre
+  quote: Quote
+  text: Text
 }
 
 /**
@@ -143,6 +165,11 @@ export interface Heading extends Literal {
    */
   type: 'heading'
 
+  /**
+   * Heading rank.
+   *
+   * A value of `1` is said to be the highest rank and `3` the lowest.
+   */
   rank: 1 | 2 | 3
 }
 
