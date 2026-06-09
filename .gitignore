@@ -1,7 +1,8 @@
 .DS_Store
 *.d.ts
-!lib/gast.d.ts
 *.log
+*.tsbuildinfo
 coverage/
 node_modules/
 yarn.lock
+!lib/gast.d.ts
