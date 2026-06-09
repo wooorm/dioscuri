@@ -84,7 +84,6 @@
     "atLeast": 100,
     "strict": true
   },
-  "types": "index.d.ts",
   "type": "module",
   "version": "1.4.0",
   "xo": {
