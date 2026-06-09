@@ -1,41 +1,8 @@
 {
-  "name": "dioscuri",
-  "version": "1.3.0",
-  "description": "A gemtext (`text/gemini`) parser with support for streaming, ASTs, and CSTs",
-  "license": "MIT",
-  "keywords": [
-    "dioscuri",
-    "castor",
-    "pollux",
-    "gemini",
-    "gemtext",
-    "document",
-    "parse",
-    "tokenize",
-    "lexer",
-    "stream",
-    "ast",
-    "cts"
-  ],
-  "repository": "wooorm/dioscuri",
-  "bugs": "https://github.com/wooorm/dioscuri/issues",
-  "funding": {
-    "type": "github",
-    "url": "https://github.com/sponsors/wooorm"
-  },
   "author": "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)",
+  "bugs": "https://github.com/wooorm/dioscuri/issues",
   "contributors": [
     "Titus Wormer <tituswormer@gmail.com> (https://wooorm.com)"
-  ],
-  "sideEffects": false,
-  "type": "module",
-  "main": "index.js",
-  "types": "index.d.ts",
-  "files": [
-    "lib/",
-    "index.d.ts.map",
-    "index.d.ts",
-    "index.js"
   ],
   "dependencies": {
     "@types/mdast": "^3.0.0",
@@ -45,6 +12,7 @@
     "unist-util-visit": "^4.0.0",
     "zwitch": "^2.0.0"
   },
+  "description": "A gemtext (`text/gemini`) parser with support for streaming, ASTs, and CSTs",
   "devDependencies": {
     "@types/concat-stream": "^2.0.0",
     "c8": "^11.0.0",
@@ -57,27 +25,68 @@
     "typescript": "^6.0.0",
     "xo": "^2.0.0"
   },
+  "files": [
+    "lib/",
+    "index.d.ts.map",
+    "index.d.ts",
+    "index.js"
+  ],
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/wooorm"
+  },
+  "keywords": [
+    "ast",
+    "castor",
+    "cst",
+    "dioscuri",
+    "document",
+    "gemini",
+    "gemtext",
+    "lexer",
+    "parse",
+    "pollux",
+    "stream",
+    "tokenize"
+  ],
+  "license": "MIT",
+  "main": "index.js",
+  "name": "dioscuri",
   "overrides": {
     "c8": {
       "yargs": "^18.0.0"
     }
   },
-  "scripts": {
-    "prepack": "npm run build && npm run format",
-    "build": "tsc --build --clean && tsc --build && type-coverage",
-    "format": "remark . -qfo && prettier . -w --log-level warn && xo --fix",
-    "test-api": "node --conditions development test/index.js",
-    "test-coverage": "c8 --check-coverage --100 --reporter lcov npm run test-api",
-    "test": "npm run build && npm run format && npm run test-coverage"
-  },
   "prettier": {
-    "tabWidth": 2,
-    "useTabs": false,
-    "singleQuote": true,
     "bracketSpacing": false,
     "semi": false,
-    "trailingComma": "none"
+    "singleQuote": true,
+    "tabWidth": 2,
+    "trailingComma": "none",
+    "useTabs": false
   },
+  "remarkConfig": {
+    "plugins": [
+      "remark-preset-wooorm"
+    ]
+  },
+  "repository": "wooorm/dioscuri",
+  "scripts": {
+    "build": "tsc --build --clean && tsc --build && type-coverage",
+    "format": "remark --frail --output --quiet -- . && prettier --log-level warn --write -- . && xo --fix",
+    "prepack": "npm run build && npm run format",
+    "test-api": "node --conditions development test/index.js",
+    "test-coverage": "c8 --100 --reporter lcov -- npm run test-api",
+    "test": "npm run build && npm run format && npm run test-coverage"
+  },
+  "sideEffects": false,
+  "typeCoverage": {
+    "atLeast": 100,
+    "strict": true
+  },
+  "types": "index.d.ts",
+  "type": "module",
+  "version": "1.3.0",
   "xo": {
     "prettier": true,
     "rules": {
@@ -92,15 +101,5 @@
       "unicorn/prefer-switch": "off"
     },
     "space": "off"
-  },
-  "remarkConfig": {
-    "plugins": [
-      "preset-wooorm"
-    ]
-  },
-  "typeCoverage": {
-    "atLeast": 100,
-    "detail": true,
-    "strict": true
   }
 }
