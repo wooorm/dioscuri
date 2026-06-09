@@ -1,7 +1,3 @@
-/**
- * @typedef {import('../lib/parser.js').BufferEncoding} Encoding
- */
-
 import assert from 'node:assert/strict'
 import {Buffer} from 'node:buffer'
 import {createReadStream, createWriteStream, promises as fs} from 'node:fs'
@@ -80,7 +76,7 @@ test('stream', async () => {
       .pipe(stream())
       .pipe(createWriteStream('integrate-output'))
       .on('close', async function () {
-        const input = String(await fs.readFile('integrate-output'))
+        const input = await fs.readFile('integrate-output', 'utf8')
         assert.equal(input, '<h1>∵</h1>', 'should support stdin')
 
         await fs.unlink('integrate-input')
@@ -201,8 +197,8 @@ test('stream', async () => {
 })
 
 /**
- * @param {string|Buffer} value
- * @param {Encoding} [encoding]
+ * @param {Buffer | string} value
+ * @param {BufferEncoding | null | undefined} [encoding]
  */
 function slowStream(value, encoding) {
   const stream = new PassThrough()

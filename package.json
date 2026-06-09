@@ -90,6 +90,7 @@
   "xo": {
     "prettier": true,
     "rules": {
+      "@typescript-eslint/array-type": "off",
       "@typescript-eslint/no-restricted-types": "off",
       "import-x/no-unassigned-import": "off",
       "require-unicode-regexp": "off",

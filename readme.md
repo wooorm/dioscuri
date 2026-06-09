@@ -228,7 +228,7 @@ import {fromGemtext} from 'dioscuri'
 
 const doc = await fs.readFile('example.gmi')
 
-console.dir(fromGemtext(doc), {depth: null})
+console.dir(fromGemtext(doc), {depth: undefined})
 ```
 
 …now running `node example.js` yields (positional info removed for brevity):
@@ -450,7 +450,7 @@ import {fromGemtext, toMdast} from 'dioscuri'
 
 const doc = await fs.readFile('example.gmi')
 
-console.dir(toMdast(fromGemtext(doc)), {depth: null})
+console.dir(toMdast(fromGemtext(doc)), {depth: undefined})
 ```
 
 …now running `node example.js` yields (position info removed for brevity):

@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/consistent-type-definitions */
 
 import type {
-  Parent as UnistParent,
   Literal as UnistLiteral,
-  Node as UnistNode
+  Node as UnistNode,
+  Parent as UnistParent
 } from 'unist'
 
 export type Node = Root | Content
@@ -62,7 +62,7 @@ export interface Parent extends UnistParent {
   /**
    * List representing the children of a node.
    */
-  children: Content[]
+  children: Array<Content>
 }
 
 /**
@@ -77,7 +77,7 @@ export interface Root extends Parent {
   /**
    * List representing the children of a node.
    */
-  children: RootContent[]
+  children: Array<RootContent>
 }
 /**
  * Represents a gemini list.
@@ -91,7 +91,7 @@ export interface List extends Parent {
   /**
    * List representing the children of a node.
    */
-  children: ListContent[]
+  children: Array<ListContent>
 }
 
 /**

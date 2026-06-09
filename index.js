@@ -1,8 +1,8 @@
 /**
- * @typedef {import('./lib/parser.js').Buf} Value
- * @typedef {import('./lib/parser.js').BufferEncoding} BufferEncoding
  * @typedef {import('./lib/compiler.js').Options} CompileOptions
  * @typedef {import('./lib/from-mdast.js').Options} FromMdastOptions
+ * @typedef {import('./lib/parser.js').BufferEncoding} BufferEncoding
+ * @typedef {import('./lib/parser.js').Value} Value
  */
 
 export {buffer} from './lib/buffer.js'
