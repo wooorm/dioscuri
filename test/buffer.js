@@ -56,8 +56,14 @@ test('buffer', () => {
 
   assert.equal(
     buffer('><&'),
-    '<blockquote>\n<p><&</p>\n</blockquote>',
+    '<blockquote>\n<p>&lt;&amp;</p>\n</blockquote>',
     'should encode certain HTML syntax characters in quotes'
+  )
+
+  assert.equal(
+    buffer('><script>alert(1)</script>'),
+    '<blockquote>\n<p>&lt;script&gt;alert(1)&lt;/script&gt;</p>\n</blockquote>',
+    'should prevent HTML injection in quotes'
   )
 
   assert.equal(
